@@ -1,6 +1,8 @@
 package com.foxpro.databaseManager;
 
 
-class DatabaseMain{
+static class DatabaseMain{
+
     
+
 }

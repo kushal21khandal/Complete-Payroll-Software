@@ -1,6 +1,6 @@
 package com.foxpro.fileManager;
 
-class FileComponent{
+static class FileComponentMain{
 
     # crete specific folder everytime a new_establishment created
     # file , dir -> create , save , delete

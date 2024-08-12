@@ -7,52 +7,63 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public static class Config {
+static class Config {
 
-    #
-    read config.txt from
-    resource folder
+    /*
+     * inputStream to config file already defined to the config.txt in the resource
+     * folder gloabally
+     *
+     * functions : static
+     * getPathToPrntFolder() -> if( path not present ) -> terminate the program ,
+     * but does the check the validity of the path ( valid dir or wrong path )
+     *
+     */
 
     static {
-        public String pathToPrntFolder;
-        InputStream inputStream = Config.class.getClassLoader().getResourceAsStream("config.txt");
+        InputStream inputStreamToConfigFile = Config.class.getClassLoader().getResourceAsStream("config.txt");
+        String pathToPrntFolder;
+        Pattern pattern;
+        Matcher matcher;
     }
 
-    public static String getPrntPathFromConfig(){
+    Config(){
+        pathToPrntFolder = getPathToPrntFolder();
+    }
+
+    public static String getPathToPrntFolder() {
+        pattern = Pattern.compile("path:(\\S+)");
+        String path = "";
+        matcher = pattern.matcher(path);
+
         InputStreamReader inputStreamReader = null;
-
-        String newLine , path;
-
-        Pattern pathRegex = Pattern.compile("path:(\\S+)")
-        Matcher matcher = pathRegex.matcher(newLine);
-
-        try{
-            inputStreamReader = new InputStreamReader(inputStream);
+        try {
+            inputStreamReader = new InputStreamReader(inputStreamToConfigFile);
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
-            while((newLine = bufferedReader.readLine()) != null){
-                matcher.reset(newLine);
-                if ( matcher.matches()){
-                    while(matcher.find()){
+            outer: while ((path = bufferedReader.readLine().trim()) != null) {
+                matcher.reset(path);
+                if (matcher.matches() == true) {
+                    while (matcher.find()) {
                         path = matcher.group(1);
+                        break outer;
                     }
                 }
             }
+
+            if (path == "") {
+                System.out.println("path could not be found");
+                System.exit(0);
+
+            }
             bufferedReader.close();
-        }
-        catch(IOException exception){
+        } catch (IOException exception) {
             exception.printStackTrace();
-        }
-        finally{
-            if ( inputStreamReader != null){
-                inputStreamReader = null;
+        } finally {
+            if (inputStreamToConfigFile != null) {
+                inputStreamToConfigFile.close();
             }
         }
         return path;
+
     }
-
-
-
-
-
 }
