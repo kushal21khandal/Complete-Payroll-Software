@@ -1,7 +1,23 @@
 package com.foxpro.fileManager;
 
-static class FileComponentMain{
+import java.io.File;
+import java.io.IOException;
 
-    # crete specific folder everytime a new_establishment created
+class FileComponentMain {
+
+    /*
+         # crete specific folder everytime a new_establishment created
     # file , dir -> create , save , delete
+     */
+     static void touch(String path) throws IOException{
+          File file = new File(path);
+          file.createNewFile();
+     }
+
+     static void mkdir(String path){
+          File file = new File(path);
+          file.mkdirs();
+     }
+
+
 }

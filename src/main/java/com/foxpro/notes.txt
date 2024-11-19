@@ -1,0 +1,13 @@
+jab tak me data ko ache se smjh nhi jaata me isme kaise kuch aage karu
+
+aur dusari main baat mujhe 2 cheezein seekhni h -> mysql and fileIO operations in java
+
+
+
+how about this :
+opening  the connection when we type the input 'emp' in the cmd and closing the connection when 'quit/exit' in cmd for emp
+
+
+// config.main() has to be run on the very first on app.java
+        NO NEED FOR RUNNING CONFIG.MAIN() -> changed to all static mode without any external initializaiton
+
