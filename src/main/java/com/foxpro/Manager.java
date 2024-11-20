@@ -43,4 +43,15 @@ class Manager {
         /* no need for removing a establishment , but if this feature necesary , have to delete the entire folder also of that establishment */
         EstablishmentDatabaseHandler.removeEstablishment(pfRegNumber);
     }
+
+
+
+
+    // salary structure
+    public static void updateSalaryStructure( float basic , float hra , float convence , flaot overtime , float washingAllowance , float msl1 , float msl2 , float msl3){
+        EstablishmentDatabaseHandler.updateSalaryStructure(basic , hra , convence , overtime , washingAllowance , msl1 , msl2 , msl3);
+    }
+    public static Object getEstablishmentSalaryStructureDetails(int pfRegNumber) throws  SQLException{
+        return EstablishmentDatabaseHandler.getEstablishmentSalaryStructureDetails(pfRegNumber);
+    }
 }

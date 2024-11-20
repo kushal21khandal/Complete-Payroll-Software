@@ -90,4 +90,21 @@ public class EstablishmentDatabaseHandler {
         }
     }
 
+
+
+    // salary structure
+    public static void updateSalaryStructure( float basic , float hra , float convence , flaot overtime , float washingAllowance , float msl1 , float msl2 , float msl3){
+        try {
+
+            EstablishmentDatabaseMain.updateSalaryStructure( conn , basic , hra , convence , overtime , washingAllowance , msl1 , msl2 , msl3);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+   
+    public static Object getEstablishmentSalaryStructureDetails(int pfRegNumber) throws SQLException {
+        return EstablishmentDatabaseMain.getEstablishmentSalaryStructureDetails(conn, pfRegNumber);
+
+    }
+
 }

@@ -2,6 +2,36 @@ package com.foxpro;
 
 class Establishment {
 
+
+    class SalaryStructure{
+        float
+            basic,
+            hra,
+            convence ,
+            overtime ,
+            washingAllowance ,
+            msl1 ,
+            msl2 ,
+            msl3 ;
+
+        SalaryStructure(float basic , float hra , float convence , float overtime , float washingAllowance , float msl1 , float msl2 , float msl3){
+            this.basic = basic ;
+            this.hra = hra;
+            this.convence = convence;
+            this.overtime = overtime;
+            this.washingAllowance = washingAllowance;
+            this.msl1 = msl1;
+            this.msl2 = msl2;
+            this.msl3 = msl3;
+        }
+
+
+        public void updateSalaryStructure(float basic , float hra , float convence , float overtime , float washingAllowance , float msl1 , float msl2 , float msl3){
+            Manager.updateSalaryStructure(basic , hra , convence , overtime , washingAllowance , msl1 , msl2 , msl3);
+        }
+
+    }
+
     int pfRegNumber,
             esicRegNumber,
             phoneNumber;
