@@ -7,17 +7,17 @@ import java.util.HashMap;
 
 class Cmd {
 
-    HashMap<Integer, Establishment> activeSessions = new HashMap<>();
+    HashMap<Long, Establishment> activeSessions = new HashMap<>();
 
     public void print(String string) {
         System.out.print(string + " : ");
     }
 
-    public boolean checkInActiveSesssion(int pfRegNumber) {
+    public boolean checkInActiveSesssion(long pfRegNumber) {
         return activeSessions.containsKey(pfRegNumber);
     }
 
-    public Establishment getFromActiveSessions(int pfRegNumber) {
+    public Establishment getFromActiveSessions(long pfRegNumber) {
         return activeSessions.get(pfRegNumber);
     }
 
@@ -70,7 +70,7 @@ class Cmd {
         InputStreamReader inputStreamReader = null;
 
         // Establishment fields
-        int pfRegNumber, esicRegNumber, phoneNumber;
+        long pfRegNumber, esicRegNumber, phoneNumber;
         String companyName, ownerName, address, dateOfPfRegistration, dateOfEsicRegistration;
 
         // Employees fields
@@ -79,7 +79,7 @@ class Cmd {
         String month = "", pathPfCSV = "", pathClientCSV = "";
 
         // salary structure fields
-                float
+        double
             basic,
             hra,
             convence ,
@@ -123,10 +123,10 @@ class Cmd {
                             System.out.println("================ ADD - ESTABLISHMENT ==================");
 
                             print("PF_REGISTRATION_NUMBER");
-                            pfRegNumber = Integer.parseInt(bufferedReader.readLine().trim());
+                            pfRegNumber = Long.parseLong(bufferedReader.readLine().trim());
 
                             print("ESIC_REGISTRAION_NUMBER");
-                            esicRegNumber = Integer.parseInt(bufferedReader.readLine().trim());
+                            esicRegNumber = Long.parseLong(bufferedReader.readLine().trim());
 
                             print("COMPANY NAME");
                             companyName = bufferedReader.readLine().trim();
@@ -135,7 +135,7 @@ class Cmd {
                             ownerName = bufferedReader.readLine().trim();
 
                             print("PHONE NUMBER");
-                            phoneNumber = Integer.parseInt(bufferedReader.readLine().trim());
+                            phoneNumber = Long.parseLong(bufferedReader.readLine().trim());
 
                             print("DATE OF PF_REGISTRATION ( DD/MM/YYYY )");
                             dateOfPfRegistration = bufferedReader.readLine().trim();
@@ -155,7 +155,7 @@ class Cmd {
                             System.out.println("=================== UPDATE - ESTABLISHMENT ======================");
 
                             print("PF_REGISTRATION_NUMBER");
-                            pfRegNumber = Integer.parseInt(bufferedReader.readLine().trim());
+                            pfRegNumber = Long.parseLong(bufferedReader.readLine().trim());
 
                             if (checkInActiveSesssion(pfRegNumber)) {
                                 establishment = getFromActiveSessions(pfRegNumber);
@@ -178,35 +178,35 @@ class Cmd {
 
                                 print("basic");
                                 userInput = bufferedReader.readLine().trim();
-                                basic = userInput.equals("") ? salaryStructure.basic : Float.parseFloat(userInput);
+                                basic = userInput.equals("") ? salaryStructure.basic : Double.parseDouble(userInput);
 
                                 print("hra");
                                 userInput = bufferedReader.readLine().trim();
-                                hra = userInput.equals("") ? salaryStructure.hra : Float.parseFloat(userInput);
+                                hra = userInput.equals("") ? salaryStructure.hra : Double.parseDouble(userInput);
 
                                 print("convence");
                                 userInput = bufferedReader.readLine().trim();
-                                convence = userInput.equals("") ? salaryStructure.convence : Float.parseFloat(userInput);
+                                convence = userInput.equals("") ? salaryStructure.convence : Double.parseDouble(userInput);
 
                                 print("overtime");
                                 userInput = bufferedReader.readLine().trim();
-                                overtime = userInput.equals("") ? salaryStructure.overtime : Float.parseFloat(userInput);
+                                overtime = userInput.equals("") ? salaryStructure.overtime : Double.parseDouble(userInput);
 
                                 print("washing allowance");
                                 userInput = bufferedReader.readLine().trim();
-                                washingAllowance = userInput.equals("") ? salaryStructure.washingAllowance : Float.parseFloat(userInput);
+                                washingAllowance = userInput.equals("") ? salaryStructure.washingAllowance : Double.parseDouble(userInput);
 
                                 print("msl1");
                                 userInput = bufferedReader.readLine().trim();
-                                msl1 = userInput.equals("") ? salaryStructure.msl1 : Float.parseFloat(userInput);
+                                msl1 = userInput.equals("") ? salaryStructure.msl1 : Double.parseDouble(userInput);
 
                                 print("msl2");
                                 userInput = bufferedReader.readLine().trim();
-                                msl2 = userInput.equals("") ? salaryStructure.msl2 : Float.parseFloat(userInput);
+                                msl2 = userInput.equals("") ? salaryStructure.msl2 : Double.parseDouble(userInput);
 
                                 print("msl3");
                                 userInput = bufferedReader.readLine().trim();
-                                msl3 = userInput.equals("") ? salaryStructure.msl3 : Float.parseFloat(userInput);
+                                msl3 = userInput.equals("") ? salaryStructure.msl3 : Double.parseDouble(userInput);
 
                                 System.out.println("\n Confirm changes : ");
                                 print("basic");
@@ -244,11 +244,11 @@ class Cmd {
 
                                 print("PF_REGISTRATION_NUMBER");
                                 userInput = bufferedReader.readLine().trim();
-                                pfRegNumber = userInput.equals("") ? establishment.pfRegNumber : Integer.parseInt(userInput);
+                                pfRegNumber = userInput.equals("") ? establishment.pfRegNumber : Long.parseLong(userInput);
 
                                 print("ESIC_REGISTRAION_NUMBER");
                                 userInput = bufferedReader.readLine().trim();
-                                esicRegNumber = userInput.equals("") ? establishment.esicRegNumber : Integer.parseInt(userInput);
+                                esicRegNumber = userInput.equals("") ? establishment.esicRegNumber : Long.parseLong(userInput);
 
                                 print("COMPANY NAME");
                                 userInput = bufferedReader.readLine().trim();
@@ -260,7 +260,7 @@ class Cmd {
 
                                 print("PHONE NUMBER");
                                 userInput = bufferedReader.readLine().trim();
-                                phoneNumber = userInput.equals("") ? establishment.phoneNumber : Integer.parseInt(userInput);
+                                phoneNumber = userInput.equals("") ? establishment.phoneNumber : Long.parseLong(userInput);
 
                                 print("DATE OF PF_REGISTRATION ( DD/MM/YYYY )");
                                 userInput = bufferedReader.readLine().trim();
@@ -323,7 +323,7 @@ class Cmd {
                         if (userInput.equalsIgnoreCase("add")) {
 
                             print("PF REGISTRATION NUMBER");
-                            pfRegNumber = Integer.parseInt(bufferedReader.readLine().trim());
+                            pfRegNumber = Long.parseLong(bufferedReader.readLine().trim());
 
                             print("YEAR");
                             year = Integer.parseInt(bufferedReader.readLine().trim());

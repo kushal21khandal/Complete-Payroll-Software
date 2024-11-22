@@ -17,12 +17,12 @@ class Manager {
         EstablishmentDatabaseHandler.closeConnection();
     }
 
-    public static Object getEstablishmentDetails(int pfRegNumber) throws SQLException {
+    public static Object getEstablishmentDetails(long pfRegNumber) throws SQLException {
         return EstablishmentDatabaseHandler.getEstablishmentDetails(pfRegNumber);
     }
 
     // Establishment
-    public static void createEstablishment(int pfRegNumber, int esicRegNumber, int phoneNumber, String companyName, String ownerName, String address, String dateOfPfRegistration, String dateOfEsicRegistration) {
+    public static void createEstablishment(long pfRegNumber, long esicRegNumber, long phoneNumber, String companyName, String ownerName, String address, String dateOfPfRegistration, String dateOfEsicRegistration) {
 
         if (EstablishmentDatabaseHandler.checkForEstablishment(pfRegNumber) == true) {
             System.out.println("establihsment already created");
@@ -35,11 +35,11 @@ class Manager {
 
     }
 
-    public static void updateEstablishment(int pfRegNumber, int esicRegNumber, int phoneNumber, String companyName, String ownerName, String address, String dateOfPfRegistration, String dateOfEsicRegistration) {
+    public static void updateEstablishment(long pfRegNumber, long esicRegNumber, long phoneNumber, String companyName, String ownerName, String address, String dateOfPfRegistration, String dateOfEsicRegistration) {
         EstablishmentDatabaseHandler.updateEstablishment(pfRegNumber, esicRegNumber, phoneNumber, companyName, ownerName, address, dateOfPfRegistration, dateOfEsicRegistration);
     }
 
-    public static void removeEstablishment(int pfRegNumber) {
+    public static void removeEstablishment(long pfRegNumber) {
         /* no need for removing a establishment , but if this feature necesary , have to delete the entire folder also of that establishment */
         EstablishmentDatabaseHandler.removeEstablishment(pfRegNumber);
     }
@@ -48,10 +48,10 @@ class Manager {
 
 
     // salary structure
-    public static void updateSalaryStructure( float basic , float hra , float convence , flaot overtime , float washingAllowance , float msl1 , float msl2 , float msl3){
-        EstablishmentDatabaseHandler.updateSalaryStructure(basic , hra , convence , overtime , washingAllowance , msl1 , msl2 , msl3);
+    public static void updateSalaryStructure( long pfRegNumber , double basic , double hra , double convence , double overtime , double washingAllowance , double msl1 , double msl2 , double msl3){
+        EstablishmentDatabaseHandler.updateSalaryStructure(pfRegNumber ,basic , hra , convence , overtime , washingAllowance , msl1 , msl2 , msl3);
     }
-    public static Object getEstablishmentSalaryStructureDetails(int pfRegNumber) throws  SQLException{
+    public static Object getEstablishmentSalaryStructureDetails(long pfRegNumber) throws  SQLException{
         return EstablishmentDatabaseHandler.getEstablishmentSalaryStructureDetails(pfRegNumber);
     }
 }

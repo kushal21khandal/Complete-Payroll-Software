@@ -4,7 +4,7 @@ class Establishment {
 
 
     class SalaryStructure{
-        float
+        double
             basic,
             hra,
             convence ,
@@ -14,7 +14,7 @@ class Establishment {
             msl2 ,
             msl3 ;
 
-        SalaryStructure(float basic , float hra , float convence , float overtime , float washingAllowance , float msl1 , float msl2 , float msl3){
+        SalaryStructure(double basic , double hra , double convence , double overtime , double washingAllowance , double msl1 , double msl2 , double msl3){
             this.basic = basic ;
             this.hra = hra;
             this.convence = convence;
@@ -26,13 +26,13 @@ class Establishment {
         }
 
 
-        public void updateSalaryStructure(float basic , float hra , float convence , float overtime , float washingAllowance , float msl1 , float msl2 , float msl3){
-            Manager.updateSalaryStructure(basic , hra , convence , overtime , washingAllowance , msl1 , msl2 , msl3);
+        public void updateSalaryStructure(double basic , double hra , double convence , double overtime , double washingAllowance , double msl1 , double msl2 , double msl3){
+            Manager.updateSalaryStructure(pfRegNumber , basic , hra , convence , overtime , washingAllowance , msl1 , msl2 , msl3);
         }
 
     }
 
-    int pfRegNumber,
+    long pfRegNumber,
             esicRegNumber,
             phoneNumber;
 
@@ -42,7 +42,7 @@ class Establishment {
             dateOfPfRegistration = "", // have to use regex to separate date month year DD-MM-YYYY
             dateOfEsicRegistration = "";
 
-    Establishment(int pfRegNumber, int esicRegNumber, int phoneNumber, String companyName, String ownerName, String address, String dateOfPfRegistration, String dateOfEsicRegistration) {
+    Establishment(long pfRegNumber, long esicRegNumber, long phoneNumber, String companyName, String ownerName, String address, String dateOfPfRegistration, String dateOfEsicRegistration) {
         this.pfRegNumber = pfRegNumber;
         this.esicRegNumber = esicRegNumber;
         this.phoneNumber = phoneNumber;
@@ -58,11 +58,11 @@ class Establishment {
 
     }
 
-    public void updateEstablishment(int pfRegNumber, int esicRegNumber, int phoneNumber, String companyName, String ownerName, String address, String dateOfPfRegistration, String dateOfEsicRegistration) {
+    public void updateEstablishment(long pfRegNumber, long esicRegNumber, long phoneNumber, String companyName, String ownerName, String address, String dateOfPfRegistration, String dateOfEsicRegistration) {
         Manager.updateEstablishment(pfRegNumber, esicRegNumber, phoneNumber, companyName, ownerName, address, dateOfPfRegistration, dateOfEsicRegistration);
     }
 
-    public void removeEstablishment(int pfRegNumber) {
+    public void removeEstablishment(long pfRegNumber) {
         Manager.removeEstablishment(pfRegNumber);
 
     }

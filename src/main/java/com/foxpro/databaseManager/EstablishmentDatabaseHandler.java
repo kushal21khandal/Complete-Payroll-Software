@@ -50,12 +50,12 @@ public class EstablishmentDatabaseHandler {
      * checkForEstablishment -> boolean
      * getEstablishmentDetails -> HashMap< String , String >
      */
-    public static Object getEstablishmentDetails(int pfRegNumber) throws SQLException {
+    public static Object getEstablishmentDetails(long pfRegNumber) throws SQLException {
         return EstablishmentDatabaseMain.getEstablishmentDetails(conn, pfRegNumber);
 
     }
 
-    public static boolean checkForEstablishment(int pfRegNumber) {
+    public static boolean checkForEstablishment(long pfRegNumber) {
 
         boolean res = false;
         try {
@@ -66,7 +66,7 @@ public class EstablishmentDatabaseHandler {
         return res;
     }
 
-    public static void insertEstablishment(int pfRegNumber, int esicRegNumber, int phoneNumber, String companyName, String ownerName, String address, String dateOfPfRegistration, String dateOfEsicRegistration) {
+    public static void insertEstablishment(long pfRegNumber, long esicRegNumber, long phoneNumber, String companyName, String ownerName, String address, String dateOfPfRegistration, String dateOfEsicRegistration) {
         try {
             EstablishmentDatabaseMain.insertEstablishment(conn, pfRegNumber, esicRegNumber, phoneNumber, companyName, ownerName, address, dateOfPfRegistration, dateOfEsicRegistration);
         } catch (SQLException e) {
@@ -74,7 +74,7 @@ public class EstablishmentDatabaseHandler {
         }
     }
 
-    public static void updateEstablishment(int pfRegNumber, int esicRegNumber, int phoneNumber, String companyName, String ownerName, String address, String dateOfPfRegistration, String dateOfEsicRegistration) {
+    public static void updateEstablishment(long pfRegNumber, long esicRegNumber, long phoneNumber, String companyName, String ownerName, String address, String dateOfPfRegistration, String dateOfEsicRegistration) {
         try {
             EstablishmentDatabaseMain.updateEstablishment(conn, pfRegNumber, esicRegNumber, phoneNumber, companyName, ownerName, address, dateOfPfRegistration, dateOfEsicRegistration);
         } catch (SQLException e) {
@@ -82,7 +82,7 @@ public class EstablishmentDatabaseHandler {
         }
     }
 
-    public static void removeEstablishment(int pfRegNumber) {
+    public static void removeEstablishment(long pfRegNumber) {
         try {
             EstablishmentDatabaseMain.removeEstablishment(conn, pfRegNumber);
         } catch (SQLException exception) {
@@ -93,16 +93,16 @@ public class EstablishmentDatabaseHandler {
 
 
     // salary structure
-    public static void updateSalaryStructure( float basic , float hra , float convence , flaot overtime , float washingAllowance , float msl1 , float msl2 , float msl3){
+    public static void updateSalaryStructure( long pfRegNumber ,  double basic , double hra , double convence , double overtime , double washingAllowance , double msl1 , double msl2 , double msl3){
         try {
 
-            EstablishmentDatabaseMain.updateSalaryStructure( conn , basic , hra , convence , overtime , washingAllowance , msl1 , msl2 , msl3);
+            EstablishmentDatabaseMain.updateSalaryStructure( conn , pfRegNumber , basic , hra , convence , overtime , washingAllowance , msl1 , msl2 , msl3);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-   
-    public static Object getEstablishmentSalaryStructureDetails(int pfRegNumber) throws SQLException {
+
+    public static Object getEstablishmentSalaryStructureDetails(long pfRegNumber) throws SQLException {
         return EstablishmentDatabaseMain.getEstablishmentSalaryStructureDetails(conn, pfRegNumber);
 
     }

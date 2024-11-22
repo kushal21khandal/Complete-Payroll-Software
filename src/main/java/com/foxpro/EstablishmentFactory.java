@@ -7,19 +7,19 @@ class EstablishmentFactory {
 
     static class SalaryStructureFactory {
 
-        public static Establishment.SalaryStructure getSalaryStructure( Establishment establishment ,int pfRegNumber) {
+        public static Establishment.SalaryStructure getSalaryStructure( Establishment establishment ,long pfRegNumber) {
             Establishment.SalaryStructure salaryStructure = null;
             try {
                 Object details = Manager.getEstablishmentSalaryStructureDetails(pfRegNumber);
                 salaryStructure = establishment.new SalaryStructure(
-                        ((ResultSet) details).getFloat("basic"),
-                        ((ResultSet) details).getFloat("hra"),
-                        ((ResultSet) details).getFloat("convence"),
-                        ((ResultSet) details).getFloat("overtime"),
-                        ((ResultSet) details).getFloat("washingAllowance"),
-                        ((ResultSet) details).getFloat("msl1"),
-                        ((ResultSet) details).getFloat("msl2"),
-                        ((ResultSet) details).getFloat("msl3")
+                        ((ResultSet) details).getDouble("basic"),
+                        ((ResultSet) details).getDouble("hra"),
+                        ((ResultSet) details).getDouble("convence"),
+                        ((ResultSet) details).getDouble("overtime"),
+                        ((ResultSet) details).getDouble("washingAllowance"),
+                        ((ResultSet) details).getDouble("msl1"),
+                        ((ResultSet) details).getDouble("msl2"),
+                        ((ResultSet) details).getDouble("msl3")
                 );
 
             } catch (SQLException exception) {
@@ -30,9 +30,9 @@ class EstablishmentFactory {
         }
     }
 
-    public static Establishment getEstablishment(int pfRegNumber) {
+    public static Establishment getEstablishment(long pfRegNumber) {
 
-        int esicRegNumber = 0,
+        long esicRegNumber = 0,
                 phoneNumber = 0;
 
         String companyName = "",
@@ -42,9 +42,9 @@ class EstablishmentFactory {
                 dateOfEsicRegistration = "";
         try {
             Object details = Manager.getEstablishmentDetails(pfRegNumber);
-            esicRegNumber = ((ResultSet) details).getInt("esicRegNumber");
-            esicRegNumber = ((ResultSet) details).getInt("esicRegNumber");
-            phoneNumber = ((ResultSet) details).getInt("phoneNumber");
+            esicRegNumber = ((ResultSet) details).getLong("esicRegNumber");
+            esicRegNumber = ((ResultSet) details).getLong("esicRegNumber");
+            phoneNumber = ((ResultSet) details).getLong("phoneNumber");
             companyName = ((ResultSet) details).getString("companyName");
             ownerName = ((ResultSet) details).getString("ownerName");
             address = ((ResultSet) details).getString("address");
