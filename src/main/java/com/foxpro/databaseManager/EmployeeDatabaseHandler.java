@@ -41,7 +41,7 @@ public class EmployeeDatabaseHandler {
     }
 
 
-    public static void execute(String commandPath , String databasePath){
+    public static void executeCreateMonthTable(String commandPath , String databasePath){
         try {
             Runtime.getRuntime().exec(new String[]{
                 "sqlite3 " + databasePath  , ".read " + commandPath
@@ -50,4 +50,23 @@ public class EmployeeDatabaseHandler {
             e.printStackTrace();
         }
     }
+
+    public static void executeFillMonthTable(String pathToDb , String pathToPfCSV){
+        try {
+            Runtime.getRuntime().exec(new String[]{
+                "sqlite3 " + pathToDb , ".import --csv --skip 1 " + pathToPfCSV + " data"
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void printEmployeeDetails(String uanNumber){
+        try {
+            EmployeeDatabaseMain.printEmployeeDetails( conn ,Integer.parseInt(uanNumber));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

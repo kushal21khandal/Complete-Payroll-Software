@@ -5,30 +5,6 @@ import java.sql.SQLException;
 
 class EstablishmentFactory {
 
-    static class SalaryStructureFactory {
-
-        public static Establishment.SalaryStructure getSalaryStructure( Establishment establishment ,long pfRegNumber) {
-            Establishment.SalaryStructure salaryStructure = null;
-            try {
-                Object details = Manager.getEstablishmentSalaryStructureDetails(pfRegNumber);
-                salaryStructure = establishment.new SalaryStructure(
-                        ((ResultSet) details).getDouble("basic"),
-                        ((ResultSet) details).getDouble("hra"),
-                        ((ResultSet) details).getDouble("convence"),
-                        ((ResultSet) details).getDouble("overtime"),
-                        ((ResultSet) details).getDouble("washingAllowance"),
-                        ((ResultSet) details).getDouble("msl1"),
-                        ((ResultSet) details).getDouble("msl2"),
-                        ((ResultSet) details).getDouble("msl3")
-                );
-
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
-
-            return salaryStructure;
-        }
-    }
 
     public static Establishment getEstablishment(long pfRegNumber) {
 

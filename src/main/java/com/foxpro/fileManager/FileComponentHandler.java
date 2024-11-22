@@ -6,6 +6,7 @@ public class FileComponentHandler {
 
     private static final String OS_PATH_DELIMITER = System.getProperty("os.name").contains("win") ? "\\" : "/";
 
+
     public static String generatePath(String root, String[] leaves) {
         for (String s : leaves) {
             root += (OS_PATH_DELIMITER + s);
@@ -27,4 +28,8 @@ public class FileComponentHandler {
         }
     }
 
+    public static boolean isExists(String path){
+        return FileComponentMain.isExists(path);
+    }
+    
 }

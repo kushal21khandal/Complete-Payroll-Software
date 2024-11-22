@@ -2,12 +2,14 @@ package com.foxpro;
 
 import java.sql.SQLException;
 
+import com.foxpro.databaseManager.EmployeeDatabaseHandler;
 import com.foxpro.databaseManager.EstablishmentDatabaseHandler;
 import com.foxpro.fileManager.FileComponentHandler;
 
 class Manager {
 
     private static final String PATH_MAIN = Config.getPathMain();
+
 
     public static void initiateMainConnection() {
         EstablishmentDatabaseHandler.initiateConnection(FileComponentHandler.generatePath(PATH_MAIN , new String[]{"main.db"}));
@@ -54,4 +56,37 @@ class Manager {
     public static Object getEstablishmentSalaryStructureDetails(long pfRegNumber) throws  SQLException{
         return EstablishmentDatabaseHandler.getEstablishmentSalaryStructureDetails(pfRegNumber);
     }
+
+    public static void checkAndCreateDir(long pfRegNumber , int year , String month){
+        FileComponentHandler.createDir(PATH_MAIN, new String[]{
+            "data" , pfRegNumber + "" , year + "" , month
+        });
+        FileComponentHandler.createFile(PATH_MAIN, new String[]{
+            "data" , pfRegNumber + "" , year + "" , month , month+".db"
+        });
+
+    }
+
+
+    // employees
+
+
+    public static void initiateEmployeesConnection(String pfRegNumber , String year , String month , String databaseName){
+        EmployeeDatabaseHandler.initiateConnection(FileComponentHandler.generatePath(PATH_MAIN , new String[]{
+            "data" ,pfRegNumber , year , month , databaseName
+        }));
+
+    }
+    public static void closeEmployeeConnection(){
+        EmployeeDatabaseHandler.closeConnection();
+    }
+
+    public static void executeCreateTableCommand(long pfRegNumber , int year  ,String month , String databaseName){
+        EmployeeDatabaseHandler.executeCreateMonthTable(FileComponentHandler.generatePath(PATH_MAIN, new String[]{ "commands" , "table_pfSiteCSV.txt" }),FileComponentHandler.generatePath(PATH_MAIN , new String[]{"data" ,pfRegNumber + "" , year +"" , month , month+".db"}));
+    }
+
+    public static void executeFillTableCommand(String pfRegNumber , String year , String month , String dbName , String pathToPfCSVFile ){
+        EmployeeDatabaseHandler.executeFillMonthTable(FileComponentHandler.generatePath(PATH_MAIN , new String[]{"data" ,pfRegNumber , year , month , dbName}) , pathToPfCSVFile);
+    }
+
 }

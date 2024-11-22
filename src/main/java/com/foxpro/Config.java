@@ -27,5 +27,13 @@ class Config{
         return Integer.parseInt(properties.getProperty("year"));
     }
 
+    public static double getPfDeductionPercentage(){
+        return Double.parseDouble(properties.getProperty("pf_deduction_percentage"));
+    }
+    public static double getEsicDeductionPercentage(){
+        return Double.parseDouble(properties.getProperty("esic_deduction_percentage"));
+    }
+
+
 
 }

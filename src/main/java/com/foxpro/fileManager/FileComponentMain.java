@@ -19,5 +19,8 @@ class FileComponentMain {
           file.mkdirs();
      }
 
+     static boolean isExists(String path){
+          return new File(path).exists();
+     }
 
 }

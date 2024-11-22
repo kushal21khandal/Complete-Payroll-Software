@@ -3,6 +3,7 @@ package com.foxpro;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.HashMap;
 
 class Cmd {
@@ -38,7 +39,7 @@ class Cmd {
         System.out.println(establishment.address);
 
     }
-    public void printSalaryStructure(Establishment.SalaryStructure salaryStructure ) {
+    public void printSalaryStructure(SalaryStructure salaryStructure ) {
         print("basic");
         System.out.println(salaryStructure.basic);
         print("hra");
@@ -58,9 +59,10 @@ class Cmd {
     }
 
     public void run(String pathMain) throws IOException {
+        String[] months = {"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
         String command = "";
         Establishment establishment;
-        Establishment.SalaryStructure salaryStructure;
+        SalaryStructure salaryStructure;
 
         boolean mainState = true;
         boolean establishmentState = true;
@@ -168,7 +170,7 @@ class Cmd {
                             userInput = bufferedReader.readLine().trim();
 
                             if (userInput.matches("sal.*")) {
-                                salaryStructure = EstablishmentFactory.SalaryStructureFactory.getSalaryStructure(establishment, pfRegNumber);
+                                salaryStructure = SalaryStructureFactory.getSalaryStructure( pfRegNumber);
 
                                 System.out.println("\n\n");
                                 printSalaryStructure(salaryStructure);
@@ -229,7 +231,7 @@ class Cmd {
                                 print("\nMAKE CHANGES ( y / n )");
                                 userInput = bufferedReader.readLine().trim();
                                 if (userInput.equalsIgnoreCase("y")) {
-                                    salaryStructure.updateSalaryStructure(basic, hra, washingAllowance, convence, overtime, msl1, msl2, msl3);
+                                    salaryStructure.updateSalaryStructure(pfRegNumber , basic, hra, washingAllowance, convence, overtime, msl1, msl2, msl3);
                                 } else {
                                     System.out.println("aborted");
                                 }
@@ -322,6 +324,9 @@ class Cmd {
 
                         if (userInput.equalsIgnoreCase("add")) {
 
+
+
+
                             print("PF REGISTRATION NUMBER");
                             pfRegNumber = Long.parseLong(bufferedReader.readLine().trim());
 
@@ -332,14 +337,34 @@ class Cmd {
                             print("PATH TO PF SITE CSV FILE");
                             pathPfCSV = bufferedReader.readLine().trim();
 
-                            print("PATH TO CLIENT SIDE CSV FILE");
-                            pathClientCSV = bufferedReader.readLine().trim();
+                            // print("PATH TO CLIENT SIDE CSV FILE");
+                            // pathClientCSV = bufferedReader.readLine().trim();
 
-                            employees = new Employees(pfRegNumber, year, month.substring(0, 3).toUpperCase(), pathPfCSV, pathClientCSV);
-                            employees.addEmployees();
+                            for (int i =0; i< months.length; i++){
+                                if ( months[i].equals(month)){
+                            employees = new Employees(pfRegNumber, year, month.substring(0, 3).toUpperCase(), pathPfCSV , pathClientCSV);
+
+
+
+
+
+
+                            employees.addEmployees(bufferedReader);
+                            break;
+
+
+                                }
+                                else{
+                                    if (i == (months.length -1)){
+
+                                        System.out.println("month not in the correct format , use months from the below list ");
+                                    System.out.println(Arrays.toString(months));
+                                    }
+                                }
+                            }
 
                         } else if (userInput.equalsIgnoreCase("add_manually")) {
-                            System.out.println("user working");
+                            System.out.println(":this is not going to work");
 
                         } else if (userInput.equalsIgnoreCase("quit") || userInput.equalsIgnoreCase("exit")) {
                             employeeState = false;
