@@ -7,6 +7,8 @@ import java.sql.SQLException;
 
 class EmployeeDatabaseMain {
 
+
+
     static void printEmployeeDetails(Connection conn, int uan_No) throws SQLException {
         String query = "SELECT  memberId , name , doj , father/husband_name ,isAadharVerified from data where uan = ? ";
         PreparedStatement preparedStatement = conn.prepareStatement(query);
@@ -18,4 +20,10 @@ class EmployeeDatabaseMain {
         }
 
     }
+
+    static Object getAllEmployeeDetails(Connection conn) throws SQLException{
+        return conn.prepareStatement("SELECT * FROM data").executeQuery();
+    }
+
+
 }

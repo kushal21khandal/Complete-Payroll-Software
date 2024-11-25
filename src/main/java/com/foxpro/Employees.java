@@ -37,7 +37,7 @@ class Employees {
         FileReader reader = null;
         String line ;
         String[] lineSplit ;
-        double attendance , totalSalary , basic , hra , convence, overtime , washingAllowance , msl1 , msl2 , msl3 , pfReduction , esicReduction , pfPaidByEmployer , pfPaidByEmployee;
+        double attendance , totalSalary , basic , hra , convence, overtime , washingAllowance , msl1 , msl2 , msl3 , pfReduction , esicReduction , pfPaidByEmployer , pfPaidByEmployee , netPayableAmount;
         int index = 0;
 
 
@@ -74,6 +74,14 @@ class Employees {
                         washingAllowance = ( salaryStructure.washingAllowance * totalSalary) / 100 ;
 
                         pfReduction =
+
+                        //coditions
+                        /*
+                         * no pf reduction under 15000 ( y ) : where y ?
+                         * no pf reduction over the age of 58 : where age ?
+                         * pf reduction rate 12% of x : where x ?
+                         * esic reduction rate is 0.75% of x : where x ?
+                         */
 
 
 

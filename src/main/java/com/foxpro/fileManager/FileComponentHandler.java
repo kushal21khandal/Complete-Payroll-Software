@@ -1,6 +1,7 @@
 package com.foxpro.fileManager;
 
 import java.io.IOException;
+import java.util.StringBuilder;
 
 public class FileComponentHandler {
 
@@ -8,10 +9,12 @@ public class FileComponentHandler {
 
 
     public static String generatePath(String root, String[] leaves) {
+        StringBuilder stringBuilder = new StringBuilder(root);
         for (String s : leaves) {
-            root += (OS_PATH_DELIMITER + s);
+            stringBuilder.append(OS_PATH_DELIMITER);
+            stringBuilder.append(s);
         }
-        return root;
+        return stringBuilder.toString();
     }
 
     public static void createDir(String parent, String[] childArgs) {
@@ -31,5 +34,5 @@ public class FileComponentHandler {
     public static boolean isExists(String path){
         return FileComponentMain.isExists(path);
     }
-    
+
 }

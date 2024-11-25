@@ -69,4 +69,13 @@ public class EmployeeDatabaseHandler {
         }
     }
 
+    public static Object getAllEmployeeDetails(){
+        Object res = null;
+        try {
+            res = EmployeeDatabaseMain.getAllEmployeeDetails(conn);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
 }
