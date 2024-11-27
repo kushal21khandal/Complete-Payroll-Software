@@ -342,15 +342,15 @@ class Cmd {
 
                             for (int i =0; i< months.length; i++){
                                 if ( months[i].equals(month)){
-                            employees = new Employees(pfRegNumber, year, month.substring(0, 3).toUpperCase(), pathPfCSV , pathClientCSV);
+                                    employees = new Employees(pfRegNumber, year, month.substring(0, 3).toUpperCase(), pathPfCSV , pathClientCSV);
 
 
 
 
 
 
-                            employees.addEmployees(bufferedReader);
-                            break;
+                                    employees.addEmployees(bufferedReader , "automatic");
+                                    break;
 
 
                                 }

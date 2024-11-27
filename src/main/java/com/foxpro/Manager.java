@@ -16,7 +16,8 @@ class Manager {
 
 
 
-        private static String getConsolidatedReportInnerFormat( int employeeIndex , long esicRegNumber , String employeeName , double basic , double hra , double conv , double washingAllowance , double hardDuty , double totalWithoutReduction , double pfSalary , double esicAdvance , double pfDeduction , double totalDeduction , double netPayableAmount ,String fahtersName , double esicSalary , int pfAccNo , int daysWorked , int actualDays , int complementaryDays , double calcBasic , double calcHra , double calcConv , double calcWashing , double calcHardDuty , double calcTotal , long uanNo , double incentive){
+        private static String getConsolidatedReportInnerFormat(
+            int employeeIndex , long esicRegNumber , String employeeName , double basic , double hra , double conv , double washingAllowance , double hardDuty , double totalWithoutReduction , double pfSalary , double esicAdvance , double pfDeduction , double totalDeduction , double netPayableAmount ,String fahtersName , double esicSalary , int pfAccNo , int daysWorked , int actualDays , int complementaryDays , double calcBasic , double calcHra , double calcConv , double calcWashing , double calcHardDuty , double calcTotal , long uanNo , double incentive){
             return String.format(" %d   %d      %s              %f    %f    %f    %f    %f          %f    %f       %f     %f  -          %f      %f\n                     %s                                                                 %f      -       -     -\n               %d %d=%d        +  %d      %f    %f     %f    %f    %f          %f                            -\n%d           0.0                                         %f\n                                                      0    %f\n _________________________________________________________________________________________________________________________________________________________\n"
             , employeeIndex , esicRegNumber , employeeName , basic ,hra , conv , washingAllowance , hardDuty , totalWithoutReduction , pfSalary , esicAdvance , pfDeduction , totalDeduction , netPayableAmount , fahtersName , esicSalary , pfAccNo , daysWorked , actualDays , complementaryDays , calcBasic , calcHra , calcConv , calcWashing , calcHardDuty , calcTotal , uanNo ,  incentive , incentive);
         }
@@ -36,8 +37,7 @@ class Manager {
         private static String getStandaloneReportTileFormat(){
 
         }
-
-        private static String getStandaloneReportInnerFormat(){
+       private static String getStandaloneReportInnerFormat(){
 
         }
 
@@ -45,13 +45,13 @@ class Manager {
 
         static void generateReport(long pfRegNumber , int year , String month , String regionOptional){
             try {
+} atch (SQLEtry {
 
-            }
-            catch (SQLException exception) {
+            }eption exception) {
                 exception.printStackTrace();
             }
+         }
 
-        }
 
     }
 
@@ -101,13 +101,28 @@ class Manager {
         return EstablishmentDatabaseHandler.getEstablishmentSalaryStructureDetails(pfRegNumber);
     }
 
-    public static void checkAndCreateDir(long pfRegNumber, int year, String month) {
-        FileComponentHandler.createDir(PATH_MAIN, new String[]{
-            "data", pfRegNumber + "", year + "", month
-        });
-        FileComponentHandler.createFile(PATH_MAIN, new String[]{
-            "data", pfRegNumber + "", year + "", month, month + ".db"
-        });
+    public static void checkAndCreateDir(long pfRegNumber, int year, String month , String regionOptional) {
+
+        if ( regionOptional == null){
+
+
+            FileComponentHandler.createDir(PATH_MAIN, new String[]{
+                "data", pfRegNumber + "", year + "", month
+            });
+            FileComponentHandler.createFile(PATH_MAIN, new String[]{
+                "data", pfRegNumber + "", year + "", month, month + ".db"
+            });
+        }
+        else{
+            FileComponentHandler.createDir(PATH_MAIN, new String[]{
+                "data", pfRegNumber + "", year + "", month , regionOptional
+            });
+            FileComponentHandler.createFile(PATH_MAIN, new String[]{
+                "data", pfRegNumber + "", year + "", month, regionOptional ,month + ".db"
+            });
+
+        }
+
 
     }
 

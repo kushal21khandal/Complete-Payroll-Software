@@ -12,22 +12,31 @@ class Employees {
     long pfRegNumber;
     String pathPfCSV, pathClientCSV;
     int month_days;
+    String regionOptional = null;
 
 
     SalaryStructure salaryStructure;
 
-    Employees(long pfRegNumber, int year, String month, String pathPfCSV, String pathClientCSV) {
+    Employees(long pfRegNumber, int year, String month,  String pathPfCSV, String pathClientCSV, String regionOptional) {
         this.pfRegNumber = pfRegNumber;
         this.year = year;
         this.month = month;
         this.pathPfCSV = pathPfCSV;
         this.pathClientCSV = pathClientCSV;
-        Manager.checkAndCreateDir(pfRegNumber, year, month);
+        if ( regionOptional == null){
+            Manager.checkAndCreateDir(pfRegNumber, year, month , null);
+        }
+        else{
+            this.regionOptional = regionOptional;
+            Manager.checkAndCreateDir(pfRegNumber, year, month , regionOptional);
+        }
 
         salaryStructure = SalaryStructureFactory.getSalaryStructure(pfRegNumber);
     }
 
-    void addEmployees(BufferedReader consoleBufferedReader) {
+
+
+    void addEmployees(BufferedReader consoleBufferedReader , String mode ) {
 
         final double PF_REDUCTION_PERCENTAGE = Config.getPfDeductionPercentage();
         final double ESIC_DEDUCTION_PERCENTAGE = Config.getEsicDeductionPercentage();
@@ -37,11 +46,29 @@ class Employees {
         FileReader reader = null;
         String line ;
         String[] lineSplit ;
-        double attendance , totalSalary , basic , hra , convence, overtime , washingAllowance , msl1 , msl2 , msl3 , pfReduction , esicReduction , pfPaidByEmployer , pfPaidByEmployee , netPayableAmount;
+        double attendance , totalSalaryWithoutReduction , basic , hra , convence, overtime , washingAllowance , msl1 , msl2 , msl3 , pfReduction , esicReduction , pfPaidByEmployer , pfPaidByEmployee , netPayableAmount;
+
+
+        double
+            calcBasic ,
+            calcHra ,
+            calcConv ,
+            calcWashing ,
+            calcHardDuty ,
+            calcTotal ,
+            incentive;
         int index = 0;
 
 
         try {
+            /*
+             * Employees client side csv file :
+                this is what the file format should look like
+             * either uan , name , salary , attendance : length : 4
+             * either uan , name , salary
+             * either uan , name
+             * either uan : then from uan find the name from the database and take input for salary and attendance and make calculation
+             */
 
                 Manager.initiateEmployeesConnection(pfRegNumber + "", year + "" , month, month + ".db");
                 Manager.executeCreateTableCommand(pfRegNumber , year , month , month+".db");
@@ -60,6 +87,8 @@ class Employees {
 
                     if ( index != 0){
                         lineSplit = line.split(",");
+
+
                         EmployeeDatabaseHandler.printEmployeeDetails(lineSplit[0]);
 
                         System.out.print("totalSalary : ");
@@ -73,7 +102,6 @@ class Employees {
                         overtime = ( salaryStructure.overtime * totalSalary) / 100 ;
                         washingAllowance = ( salaryStructure.washingAllowance * totalSalary) / 100 ;
 
-                        pfReduction =
 
                         //coditions
                         /*
