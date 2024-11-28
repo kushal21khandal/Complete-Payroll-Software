@@ -348,11 +348,11 @@ class Cmd {
                             print("PATH TO CLIENT SIDE CSV FILE ( if no path : automatic switch to manaul mode )");
                             path_client_csv_optional = bufferedReader.readLine().trim();
 
-                            if ( region_optional == ""){
+                            if ( region_optional.isBlank()){
                                 region_optional = null;
                             }
 
-                            if ( path_client_csv_optional == ""){
+                            if ( path_client_csv_optional.isBlank()){
                                 path_client_csv_optional = null;
                             }
 
@@ -381,12 +381,12 @@ class Cmd {
                         }
 
                     }
-                } else if (userInput.equalsIgnoreCase("backup")) {
+                } else if (userInput.equalsIgnoreCase("report")) {
 
                 } else if (userInput.equalsIgnoreCase("exit") || userInput.equalsIgnoreCase("quit")) {
                     mainState = false;
                 } else {
-                    System.out.println("command not found , use commands :  est , emp , backup , exit/quit\n\n");
+                    System.out.println("command not found , use commands :  est , emp , report , exit/quit\n\n");
                 }
             }
             bufferedReader.close();
