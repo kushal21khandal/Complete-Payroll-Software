@@ -14,8 +14,6 @@ class Manager {
 
     static class GenerateReport {
 
-
-
         private static String getConsolidatedReportInnerFormat(
             int employeeIndex , long esicRegNumber , String employeeName , double basic , double hra , double conv , double washingAllowance , double hardDuty , double totalWithoutReduction , double pfSalary , double esicAdvance , double pfDeduction , double totalDeduction , double netPayableAmount ,String fahtersName , double esicSalary , int pfAccNo , int daysWorked , int actualDays , int complementaryDays , double calcBasic , double calcHra , double calcConv , double calcWashing , double calcHardDuty , double calcTotal , long uanNo , double incentive){
             return String.format(" %d   %d      %s              %f    %f    %f    %f    %f          %f    %f       %f     %f  -          %f      %f\n                     %s                                                                 %f      -       -     -\n               %d %d=%d        +  %d      %f    %f     %f    %f    %f          %f                            -\n%d           0.0                                         %f\n                                                      0    %f\n _________________________________________________________________________________________________________________________________________________________\n"
@@ -101,6 +99,15 @@ class Manager {
         return EstablishmentDatabaseHandler.getEstablishmentSalaryStructureDetails(pfRegNumber);
     }
 
+
+
+
+
+
+
+
+
+    // employees
     public static void checkAndCreateDir(long pfRegNumber, int year, String month , String regionOptional) {
 
         if ( regionOptional == null){
@@ -126,11 +133,20 @@ class Manager {
 
     }
 
-    // employees
-    public static void initiateEmployeesConnection(String pfRegNumber, String year, String month, String databaseName) {
-        EmployeeDatabaseHandler.initiateConnection(FileComponentHandler.generatePath(PATH_MAIN, new String[]{
-            "data", pfRegNumber, year, month, databaseName
+    public static void initiateEmployeesConnection(long pfRegNumber, int year, String month, String region_optional) {
+
+        if ( region_optional != null){
+            EmployeeDatabaseHandler.initiateConnection(FileComponentHandler.generatePath(PATH_MAIN, new String[]{
+            "data", pfRegNumber+"", year+"", month, region_optional , month+".db"
         }));
+
+        }
+        else{
+            EmployeeDatabaseHandler.initiateConnection(FileComponentHandler.generatePath(PATH_MAIN, new String[]{
+            "data", pfRegNumber+"", year+"", month,  month+".db"
+        }));
+
+        }
 
     }
 
@@ -138,12 +154,23 @@ class Manager {
         EmployeeDatabaseHandler.closeConnection();
     }
 
-    public static void executeCreateTableCommand(long pfRegNumber, int year, String month, String databaseName) {
-        EmployeeDatabaseHandler.executeCreateMonthTable(FileComponentHandler.generatePath(PATH_MAIN, new String[]{"commands", "table_pfSiteCSV.txt"}), FileComponentHandler.generatePath(PATH_MAIN, new String[]{"data", pfRegNumber + "", year + "", month, month + ".db"}));
+    public static void executeCreateTableCommand(long pfRegNumber, int year, String month, String region_optional) {
+        if ( region_optional != null){
+            EmployeeDatabaseHandler.executeCreateMonthTable(FileComponentHandler.generatePath(PATH_MAIN, new String[]{"commands", "table_pfSiteCSV.txt"}), FileComponentHandler.generatePath(PATH_MAIN, new String[]{"data", pfRegNumber + "", year + "", month, region_optional,month + ".db"}));
+        }
+        else{
+            EmployeeDatabaseHandler.executeCreateMonthTable(FileComponentHandler.generatePath(PATH_MAIN, new String[]{"commands", "table_pfSiteCSV.txt"}), FileComponentHandler.generatePath(PATH_MAIN, new String[]{"data", pfRegNumber + "", year + "", month, month + ".db"}));
+
+        }
     }
 
-    public static void executeFillTableCommand(String pfRegNumber, String year, String month, String dbName, String pathToPfCSVFile) {
-        EmployeeDatabaseHandler.executeFillMonthTable(FileComponentHandler.generatePath(PATH_MAIN, new String[]{"data", pfRegNumber, year, month, dbName}), pathToPfCSVFile);
+    public static void executeFillTableCommand(long pfRegNumber, int year, String month, String region_optional, String pathToPfCSVFile) {
+        if ( region_optional != null){
+            EmployeeDatabaseHandler.executeFillMonthTable(FileComponentHandler.generatePath(PATH_MAIN, new String[]{"data", pfRegNumber +"", year +"", month , region_optional, month+".db"}), pathToPfCSVFile);
+        }
+        else{
+            EmployeeDatabaseHandler.executeFillMonthTable(FileComponentHandler.generatePath(PATH_MAIN, new String[]{"data", pfRegNumber +"", year +"", month, month+".db"}), pathToPfCSVFile);
+        }
     }
 
 }

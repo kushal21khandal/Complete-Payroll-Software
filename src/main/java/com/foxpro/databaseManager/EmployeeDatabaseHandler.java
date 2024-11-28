@@ -69,6 +69,14 @@ public class EmployeeDatabaseHandler {
         }
     }
 
+    public static void printEmployeeDetailsByName(String name){
+        try {
+            EmployeeDatabaseMain.printEmployeeDetailsByName(conn , name);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static Object getAllEmployeeDetails(){
         Object res = null;
         try {
@@ -77,5 +85,13 @@ public class EmployeeDatabaseHandler {
             e.printStackTrace();
         }
         return res;
+    }
+
+    public static void insertEmployeeDetails(double[] arr , long uan){
+        try {
+           EmployeeDatabaseMain.insertEmployeeDetails( conn ,arr, uan);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

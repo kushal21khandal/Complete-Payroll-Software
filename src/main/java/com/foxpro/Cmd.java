@@ -78,7 +78,8 @@ class Cmd {
         // Employees fields
         Employees employees;
         int year;
-        String month = "", pathPfCSV = "", pathClientCSV = "";
+        String month = "", path_pf_csv = "", path_client_csv_optional = "" , region_optional = "";
+
 
         // salary structure fields
         double
@@ -334,31 +335,38 @@ class Cmd {
                             year = Integer.parseInt(bufferedReader.readLine().trim());
                             print("MONTH");
                             month = bufferedReader.readLine().trim();
-                            print("PATH TO PF SITE CSV FILE");
-                            pathPfCSV = bufferedReader.readLine().trim();
 
-                            // print("PATH TO CLIENT SIDE CSV FILE");
-                            // pathClientCSV = bufferedReader.readLine().trim();
+                            print("days in month");
+                            daysInMonth = Integer.parseInt(( bufferedReader.readLine().trim() );
+
+                            print("region ( destrict based ) [ if no region : leave empty ]");
+                            region_optional = bufferedReader.readLine().trim();
+
+                            print("PATH TO PF SITE CSV FILE ");
+                            path_pf_csv = bufferedReader.readLine().trim();
+
+                            print("PATH TO CLIENT SIDE CSV FILE ( if no path : automatic switch to manaul mode )");
+                            path_client_csv_optional = bufferedReader.readLine().trim();
+
+                            if ( region_optional == ""){
+                                region_optional = null;
+                            }
+
+                            if ( path_client_csv_optional == ""){
+                                path_client_csv_optional = null;
+                            }
+
 
                             for (int i =0; i< months.length; i++){
                                 if ( months[i].equals(month)){
-                                    employees = new Employees(pfRegNumber, year, month.substring(0, 3).toUpperCase(), pathPfCSV , pathClientCSV);
-
-
-
-
-
-
-                                    employees.addEmployees(bufferedReader , "automatic");
+                                        employees = new Employees(pfRegNumber , year , month , daysInMonth , region_optional , path_pf_csv , path_client_csv_optional);
+                                        employees.addEmployees(bufferedReader);
                                     break;
-
-
                                 }
                                 else{
                                     if (i == (months.length -1)){
-
-                                        System.out.println("month not in the correct format , use months from the below list ");
-                                    System.out.println(Arrays.toString(months));
+                                        System.out.println("month not in the correct format , use months from the below list ( CAPITAL LETTERS) ");
+                                        System.out.println(Arrays.toString(months));
                                     }
                                 }
                             }

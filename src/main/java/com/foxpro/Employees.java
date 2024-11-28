@@ -2,149 +2,268 @@ package com.foxpro;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
 
 import com.foxpro.databaseManager.EmployeeDatabaseHandler;
 
 class Employees {
 
-    String month;
-    int year;
-    long pfRegNumber;
-    String pathPfCSV, pathClientCSV;
-    int month_days;
-    String regionOptional = null;
+    String month,
+            region_optional,
+            path_pf_csv,
+            path_client_csv;
 
+    int daysInMonth, year;
+
+    long pfRegNumber;
+
+    double percentBasic,
+            percentHra,
+            percentConv,
+            percentWashingAllowance,
+            percentOvertime,
+            percentMsl1,
+            percentMsl2,
+            percentMsl3;
 
     SalaryStructure salaryStructure;
 
-    Employees(long pfRegNumber, int year, String month,  String pathPfCSV, String pathClientCSV, String regionOptional) {
+    final double PF_DEDUCTION_RATE = Config.getPfDeductionPercentage();
+    final double ESIC_DEDUCTION_RATE = Config.getEsicDeductionPercentage();
+
+    Employees(long pfRegNumber, int year, String month, int daysInMonth, String region_optional, String path_pf_csv, String path_client_csv) {
         this.pfRegNumber = pfRegNumber;
         this.year = year;
         this.month = month;
-        this.pathPfCSV = pathPfCSV;
-        this.pathClientCSV = pathClientCSV;
-        if ( regionOptional == null){
-            Manager.checkAndCreateDir(pfRegNumber, year, month , null);
-        }
-        else{
-            this.regionOptional = regionOptional;
-            Manager.checkAndCreateDir(pfRegNumber, year, month , regionOptional);
-        }
+        this.daysInMonth = daysInMonth;
+        this.region_optional = region_optional;
+        this.path_pf_csv = path_pf_csv;
+        this.path_client_csv = path_client_csv;
 
         salaryStructure = SalaryStructureFactory.getSalaryStructure(pfRegNumber);
+
+        percentBasic = salaryStructure.basic;
+        percentHra = salaryStructure.hra;
+        percentConv = salaryStructure.convence;
+        percentWashingAllowance = salaryStructure.washingAllowance;
+        percentOvertime = salaryStructure.overtime;
+        percentMsl1 = salaryStructure.msl1;
+        percentMsl2 = salaryStructure.msl2;
+        percentMsl3 = salaryStructure.msl3;
+
+        Manager.checkAndCreateDir(pfRegNumber, year, month, region_optional);
+        Manager.executeCreateTableCommand(pfRegNumber, year, month, region_optional);
+        Manager.executeFillTableCommand(pfRegNumber, year, month, region_optional, path_pf_csv);
+        Manager.initiateEmployeesConnection(pfRegNumber, year, month, region_optional);
+
     }
 
+    void addEmployees(BufferedReader mainBufferedReader) throws  IOException {
+        FileReader fileReader = null;
+        long uan = 0;
+        String[] inputArr;
+        String input;
 
+        double total_salary, attendance;
 
-    void addEmployees(BufferedReader consoleBufferedReader , String mode ) {
+        double total_basic,
+                total_hra,
+                total_conv,
+                total_overtime,
+                total_washingAllowance,
+                calc_basic,
+                calc_hra,
+                calc_conv,
+                calc_overtime,
+                calc_washingAllowance,
+                calc_incentive = 0,
+                pf_salary, pf_deduction, esic_salary, esic_deduction, total_deduction, calc_salary, netPayableAmount ,
+                pf_paid_by_employee = 0, pf_paid_by_employer = 0;
 
-        final double PF_REDUCTION_PERCENTAGE = Config.getPfDeductionPercentage();
-        final double ESIC_DEDUCTION_PERCENTAGE = Config.getEsicDeductionPercentage();
+        if (path_client_csv == null) {
+            System.out.println("\n  enter exit / quit in uan to exit");
+            System.out.print("uan : ");
 
+            while (!(input = mainBufferedReader.readLine()).equals("quit")) {
+                input = input.trim();
 
-
-        FileReader reader = null;
-        String line ;
-        String[] lineSplit ;
-        double attendance , totalSalaryWithoutReduction , basic , hra , convence, overtime , washingAllowance , msl1 , msl2 , msl3 , pfReduction , esicReduction , pfPaidByEmployer , pfPaidByEmployee , netPayableAmount;
-
-
-        double
-            calcBasic ,
-            calcHra ,
-            calcConv ,
-            calcWashing ,
-            calcHardDuty ,
-            calcTotal ,
-            incentive;
-        int index = 0;
-
-
-        try {
-            /*
-             * Employees client side csv file :
-                this is what the file format should look like
-             * either uan , name , salary , attendance : length : 4
-             * either uan , name , salary
-             * either uan , name
-             * either uan : then from uan find the name from the database and take input for salary and attendance and make calculation
-             */
-
-                Manager.initiateEmployeesConnection(pfRegNumber + "", year + "" , month, month + ".db");
-                Manager.executeCreateTableCommand(pfRegNumber , year , month , month+".db");
-
-                // import pathPfSiteCSV into table created
-                Manager.executeFillTableCommand(pfRegNumber + "" , year + "" , month , month+".db" , pathPfCSV);
-
-                System.out.print("total days in month : ");
-                month_days =Integer.parseInt(  consoleBufferedReader.readLine().trim() );
-
-
-                reader = new FileReader(pathClientCSV);
-                BufferedReader fileBufferedReader = new BufferedReader(reader);
-
-                while( ( line = fileBufferedReader.readLine()  ) != null){
-
-                    if ( index != 0){
-                        lineSplit = line.split(",");
-
-
-                        EmployeeDatabaseHandler.printEmployeeDetails(lineSplit[0]);
-
-                        System.out.print("totalSalary : ");
-                        totalSalary = Double.parseDouble( consoleBufferedReader.readLine().trim() );
-                        System.out.print("Attendance : ");
-                        attendance = Double.parseDouble(consoleBufferedReader.readLine().trim());
-
-                        basic = ( salaryStructure.basic * totalSalary) / 100;
-                        hra = (salaryStructure.hra * totalSalary) /100 ;
-                        convence = ( salaryStructure.convence * totalSalary) / 100;
-                        overtime = ( salaryStructure.overtime * totalSalary) / 100 ;
-                        washingAllowance = ( salaryStructure.washingAllowance * totalSalary) / 100 ;
-
-
-                        //coditions
-                        /*
-                         * no pf reduction under 15000 ( y ) : where y ?
-                         * no pf reduction over the age of 58 : where age ?
-                         * pf reduction rate 12% of x : where x ?
-                         * esic reduction rate is 0.75% of x : where x ?
-                         */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    }
-                    index++;
-
+                if (input.isBlank()) {
+                    System.out.print("name : ");
+                    input = mainBufferedReader.readLine().trim();
+                    // to do : print by name
+                    EmployeeDatabaseHandler.printEmployeeDetailsByName(input);
+                } else {
+                    uan = Long.parseLong(input);
+                    EmployeeDatabaseHandler.printEmployeeDetails(input);
                 }
 
-                fileBufferedReader.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
+                System.out.print("salary : ");
+                total_salary = Double.parseDouble(mainBufferedReader.readLine().trim());
+                System.out.print("attendance : ");
+                attendance = Double.parseDouble(mainBufferedReader.readLine().trim());
+
+                total_basic = (total_salary * percentBasic) / 100;
+                total_hra = (total_salary * percentHra) / 100;
+                total_conv = (total_salary * percentConv) / 100;
+                total_washingAllowance = (total_salary * percentWashingAllowance) / 100;
+                total_overtime = (total_salary * percentOvertime) / 100;
+
+                calc_basic = (total_basic * attendance) / daysInMonth;
+                calc_hra = (total_hra * attendance) / daysInMonth;
+                calc_conv = (total_conv * attendance) / daysInMonth;
+                calc_overtime = (total_overtime * attendance) / daysInMonth;
+                calc_washingAllowance = (total_washingAllowance * attendance) / daysInMonth;
+
+                pf_salary = calc_basic;
+                esic_salary = (calc_basic + calc_hra + calc_conv + calc_overtime);
+                calc_salary = (esic_salary + calc_washingAllowance + calc_incentive);
+
+                pf_deduction = (pf_salary * PF_DEDUCTION_RATE) / 100;
+                esic_deduction = (esic_salary * ESIC_DEDUCTION_RATE) / 100;
+
+                total_deduction = (pf_deduction + esic_deduction);
+                netPayableAmount = (calc_salary - total_deduction);
+
+                EmployeeDatabaseHandler.insertEmployeeDetails(
+                    new double[] {
+
+                        total_salary,
+                        attendance,
+                        total_basic,
+                        total_hra,
+                        total_conv,
+                        total_overtime,
+                        total_washingAllowance,
+                        calc_basic,
+                        calc_hra,
+                        calc_conv,
+                        calc_overtime,
+                        calc_washingAllowance,
+                        calc_incentive,
+                        pf_salary,
+                        pf_deduction,
+                        esic_salary,
+                        esic_deduction,
+                        total_deduction,
+                        calc_salary,
+                        netPayableAmount,
+                        (double)daysInMonth,
+                        pf_paid_by_employee ,
+                        pf_paid_by_employer
+
+                    } , uan
+                        );
+
+            }
+
+        } else {
+
+            try {
+            fileReader = new FileReader(path_client_csv);
+            BufferedReader fileBufferedReader = new BufferedReader(fileReader);
+
+            while ((input = fileBufferedReader.readLine()) != null) {
+                input = input.trim();
+                inputArr = input.split(",");
+
+                uan = Long.parseLong(inputArr[0]);
+
+                if (inputArr.length == 4 || inputArr.length == 3) {
+                    // first 2 columns : uan_no and name
+                    // EmployeeDatabaseHandler.printEmployeeDetails(inputArr[0]);
+
+                    if (inputArr.length == 3) {
+                        total_salary = Double.parseDouble(inputArr[1]);
+                        attendance = Double.parseDouble(inputArr[2]);
+                    } else {
+                        total_salary = Double.parseDouble(inputArr[2]);
+                        attendance = Double.parseDouble(inputArr[3]);
+                    }
+
+                } else if (inputArr.length == 2) {
+                    // cols : uan_no , salary
+                    EmployeeDatabaseHandler.printEmployeeDetails(inputArr[0]);
+
+                    total_salary = Double.parseDouble(inputArr[1]);
+
+                    System.out.print("attendace : ");
+                    attendance = Double.parseDouble(mainBufferedReader.readLine().trim());
+
+                } else if (inputArr.length == 1) {
+                    System.out.print("total salary : ");
+                    total_salary = Double.parseDouble(mainBufferedReader.readLine().trim());
+
+                    System.out.print("attendace : ");
+                    attendance = Double.parseDouble(mainBufferedReader.readLine().trim());
+
+                } else {
+                    System.out.println("empty client csv file");
+                    break;
+                }
+                total_basic = (total_salary * percentBasic) / 100;
+                total_hra = (total_salary * percentHra) / 100;
+                total_conv = (total_salary * percentConv) / 100;
+                total_washingAllowance = (total_salary * percentWashingAllowance) / 100;
+                total_overtime = (total_salary * percentOvertime) / 100;
+
+                calc_basic = (total_basic * attendance) / daysInMonth;
+                calc_hra = (total_hra * attendance) / daysInMonth;
+                calc_conv = (total_conv * attendance) / daysInMonth;
+                calc_overtime = (total_overtime * attendance) / daysInMonth;
+                calc_washingAllowance = (total_washingAllowance * attendance) / daysInMonth;
+
+                pf_salary = calc_basic;
+                esic_salary = (calc_basic + calc_hra + calc_conv + calc_overtime);
+                calc_salary = (esic_salary + calc_washingAllowance + calc_incentive);
+
+                pf_deduction = (pf_salary * PF_DEDUCTION_RATE) / 100;
+                esic_deduction = (esic_salary * ESIC_DEDUCTION_RATE) / 100;
+
+                total_deduction = (pf_deduction + esic_deduction);
+                netPayableAmount = (calc_salary - total_deduction);
+
+                EmployeeDatabaseHandler.insertEmployeeDetails(
+                    new double[] {
+
+                        total_salary,
+                        attendance,
+                        total_basic,
+                        total_hra,
+                        total_conv,
+                        total_overtime,
+                        total_washingAllowance,
+                        calc_basic,
+                        calc_hra,
+                        calc_conv,
+                        calc_overtime,
+                        calc_washingAllowance,
+                        calc_incentive,
+                        pf_salary,
+                        pf_deduction,
+                        esic_salary,
+                        esic_deduction,
+                        total_deduction,
+                        calc_salary,
+                        netPayableAmount,
+                        (double)daysInMonth,
+                        pf_paid_by_employee ,
+                        pf_paid_by_employer
+
+                    } , uan
+                        );
+            }
+            fileBufferedReader.close();
+        }
+        catch(IOException exception){
+            exception.printStackTrace();
+        }
+        finally{
             Manager.closeEmployeeConnection();
-            if ( reader != null){
-                reader = null;
+            if ( fileReader != null){
+                fileReader.close();
             }
         }
-
+        }
     }
 
 }
