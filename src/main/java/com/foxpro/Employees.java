@@ -91,7 +91,8 @@ class Employees {
                     System.out.print("name : ");
                     input = mainBufferedReader.readLine().trim();
                     // to do : print by name
-                    EmployeeDatabaseHandler.printEmployeeDetailsByName(input);
+                    uan = EmployeeDatabaseHandler.printEmployeeDetailsByName(input);
+
                 } else {
                     uan = Long.parseLong(input);
                     EmployeeDatabaseHandler.printEmployeeDetails(input);

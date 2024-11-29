@@ -42,11 +42,11 @@ class Manager {
 
 
         static void generateReport(long pfRegNumber , int year , String month , String regionOptional){
-            try {
-} atch (SQLEtry {
 
-            }eption exception) {
-                exception.printStackTrace();
+            try {
+               
+            } catch (Exception e) {
+                e.printStackTrace();
             }
          }
 

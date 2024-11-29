@@ -69,12 +69,14 @@ public class EmployeeDatabaseHandler {
         }
     }
 
-    public static void printEmployeeDetailsByName(String name){
+    public static long printEmployeeDetailsByName(String name){
+        long uan = 0 ;
         try {
-            EmployeeDatabaseMain.printEmployeeDetailsByName(conn , name);
+            uan = EmployeeDatabaseMain.printEmployeeDetailsByName(conn , name);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return uan;
     }
 
     public static Object getAllEmployeeDetails(){

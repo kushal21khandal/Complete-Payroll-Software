@@ -20,17 +20,23 @@ class EmployeeDatabaseMain {
 
     }
 
-    static void printEmployeeDetailsByName(Connection conn, String name) throws SQLException {
+    static long printEmployeeDetailsByName(Connection conn, String name) throws SQLException {
         String query = "SELECT uan , memberId , name , doj , father/husband_name ,isAadharVerified from data where name = ? ";
         PreparedStatement preparedStatement = conn.prepareStatement(query);
         preparedStatement.setString(1, name);
         ResultSet res = preparedStatement.executeQuery();
 
+        long uan = 0 ;
+
         while (res.next()) {
             System.out.print(res.getString("memberId") + "\t" + res.getString("name") + "\t" + res.getString("doj") + "\t" + res.getString("father/husband_name") + "\t" + res.getString("isAadharVerified") + "\t");
+
+            uan = Long.parseLong( res.getInt("uan") + "" );
         }
+        return uan;
+
     }
-    
+
     static Object getAllEmployeeDetails(Connection conn) throws SQLException{
         return conn.prepareStatement("SELECT * FROM data").executeQuery();
     }
