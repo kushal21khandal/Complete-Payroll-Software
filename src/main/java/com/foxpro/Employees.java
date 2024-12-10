@@ -64,6 +64,9 @@ class Employees {
         String[] inputArr;
         String input;
 
+
+        boolean incentiveProvided = false;
+
         double total_salary, attendance;
 
         double total_basic,
@@ -79,6 +82,8 @@ class Employees {
                 calc_incentive = 0,
                 pf_salary, pf_deduction, esic_salary, esic_deduction, total_deduction, calc_salary, netPayableAmount,
                 pf_paid_by_employee = 0, pf_paid_by_employer = 0;
+
+
 
         if (path_client_csv == null) {
             System.out.println("\n  enter exit / quit in uan to exit");
@@ -102,6 +107,22 @@ class Employees {
                 total_salary = Double.parseDouble(mainBufferedReader.readLine().trim());
                 System.out.print("attendance : ");
                 attendance = Double.parseDouble(mainBufferedReader.readLine().trim());
+
+
+                System.out.print("include incentive : ");
+                if ( mainBufferedReader.readLine().trim().equalsIgnoreCase("y")){
+                    if ( incentiveProvided == false){
+                        System.out.print("add incentive amount : ");
+                        calc_incentive = Double.parseDouble(mainBufferedReader.readLine().trim());
+                        incentiveProvided = true;
+                    }
+                    else{
+                        System.out.println("incentive included and set to : " + calc_incentive);
+                    }
+                }
+                else{
+                    calc_incentive = 0;
+                }
 
                 total_basic = (total_salary * percentBasic) / 100;
                 total_hra = (total_salary * percentHra) / 100;
