@@ -44,6 +44,19 @@ class Manager {
 
         static void generateReport(long pfRegNumber , int year , String month , String regionOptional){
 
+            /*
+             * 2 * word documents required to be created
+             * 1 : consolidated payslip
+             * 2 : per person pay slip
+             *
+             * for every page in consolidated payslip space for 8 ( i.e 7 persons , 1 for the header )
+             * and the ending should include the total of everything , which itself is a separate header
+             *
+             * for every per person standalone payslip , format not provided yet
+             *
+             *
+             * watch the calculations and them take steps
+             */
 
             try {
 
