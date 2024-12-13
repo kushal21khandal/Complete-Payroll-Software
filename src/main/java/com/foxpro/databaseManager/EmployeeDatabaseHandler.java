@@ -89,6 +89,17 @@ public class EmployeeDatabaseHandler {
         return res;
     }
 
+
+    public static Object getSumTotal(){
+        Object res = null;
+        try {
+            res = EmployeeDatabaseMain.getSumTotal(conn);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
+
     public static void insertEmployeeDetails(double[] arr , long uan){
         try {
            EmployeeDatabaseMain.insertEmployeeDetails( conn ,arr, uan);

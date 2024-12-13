@@ -8,6 +8,12 @@ import com.foxpro.databaseManager.EmployeeDatabaseHandler;
 
 class Employees {
 
+    /*
+     * connection for employees
+     * established inside constructor and closed inside the finally block inside function addEmployees
+     */
+
+
     String month,
             region_optional,
             path_pf_csv,
@@ -207,7 +213,7 @@ class Employees {
 
                         total_salary = Double.parseDouble(inputArr[1]);
 
-                        System.out.print("attendace : ");
+                        System.out.print("attendance : ");
                         attendance = Double.parseDouble(mainBufferedReader.readLine().trim());
 
                     } else if (inputArr.length == 1) {

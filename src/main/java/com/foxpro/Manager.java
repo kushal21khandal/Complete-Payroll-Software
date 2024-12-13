@@ -3,8 +3,11 @@ package com.foxpro;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.naming.spi.DirStateFactory;
+
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 
 import com.foxpro.databaseManager.EmployeeDatabaseHandler;
 import com.foxpro.databaseManager.EstablishmentDatabaseHandler;
@@ -13,19 +16,105 @@ import com.foxpro.fileManager.FileComponentHandler;
 class Manager {
 
     static class GenerateReport {
+        /*
+         * connection established and closed inside generateReport function
+         */
 
         private static String getConsolidatedReportInnerFormat(
-            int employeeIndex , long esicRegNumber , String employeeName , double basic , double hra , double conv , double washingAllowance , double hardDuty , double totalWithoutReduction , double pfSalary , double esicAdvance , double pfDeduction , double totalDeduction , double netPayableAmount ,String fahtersName , double esicSalary , int pfAccNo , int daysWorked , int actualDays , int complementaryDays , double calcBasic , double calcHra , double calcConv , double calcWashing , double calcHardDuty , double calcTotal , long uanNo , double incentive){
+            int employeeIndex ,
+            long esicRegNumber ,
+            String employeeName ,
+            double basic ,
+            double hra ,
+            double conv ,
+            double washingAllowance ,
+            double hardDuty ,
+            double totalWithoutReduction ,
+            double pfSalary ,
+            double esicAdvance ,
+            double pfDeduction ,
+            double totalDeduction ,
+            double netPayableAmount ,
+            String fahtersName ,
+            double esicSalary ,
+            int pfAccNo ,
+            int daysWorked ,
+            int actualDays ,
+            int complementaryDays ,
+            double calcBasic ,
+            double calcHra ,
+            double calcConv ,
+            double calcWashing ,
+            double calcHardDuty ,
+            double calcTotal ,
+            long uanNo ,
+            double incentive
+            ){
 
             return String.format(" %d   %d      %s              %f    %f    %f    %f    %f          %f    %f       %f     %f  -          %f      %f\n                     %s                                                                 %f      -       -     -\n               %d %d=%d        +  %d      %f    %f     %f    %f    %f          %f                            -\n%d           0.0                                         %f\n                                                      0    %f\n _________________________________________________________________________________________________________________________________________________________\n"
             , employeeIndex , esicRegNumber , employeeName , basic ,hra , conv , washingAllowance , hardDuty , totalWithoutReduction , pfSalary , esicAdvance , pfDeduction , totalDeduction , netPayableAmount , fahtersName , esicSalary , pfAccNo , daysWorked , actualDays , complementaryDays , calcBasic , calcHra , calcConv , calcWashing , calcHardDuty , calcTotal , uanNo ,  incentive , incentive);
         }
 
-        private static String getConsolidatedReportNetTotal(){
-
+        private static String getConsolidatedReportNetTotal(
+            double total_basic ,
+            double hra ,
+            double conv ,
+            double washingAllowance ,
+            double hardDuty ,
+            double total_salary ,
+            double daysWorked ,
+            double actualDays ,
+            double complementaryDays ,
+            double calc_basic ,
+            double calc_hra ,
+            double calc_conv ,
+            double calc_washingAllowance ,
+            double calc_hardDuty ,
+            double calcTotal ,
+            double pfSalary ,
+            double esicAdvance ,
+            double pf_deduction ,
+            double total_deduction ,
+            double netPayableAmount ,
+            double total_incentive_paid ,
+            double total_esic_salary
+        ){
+            return String.format("\n===================================================================================================================================================================\n                                                 %f   %f  %f   %f   %f         %f\n       NET TOTAL  %f %f+   0.0+  %f    %f   %f  %f   %f   %f         %f  %f     %f   %f      0    %f    %f\n                            0.0+   0.0                    %f                                        %f                0      0\n                                                      0   %f                                                                     0\n ===================================================================================================================================================================\n" ,
+             total_basic ,
+             hra ,
+             conv ,
+             washingAllowance ,
+             hardDuty ,
+             total_salary ,
+             daysWorked ,
+             actualDays ,
+             complementaryDays ,
+             calc_basic ,
+             calc_hra ,
+             calc_conv ,
+             calc_washingAllowance ,
+             calc_hardDuty ,
+             calcTotal ,
+             pfSalary ,
+             esicAdvance ,
+             pf_deduction ,
+             total_deduction ,
+             netPayableAmount ,
+             total_incentive_paid ,
+             total_esic_salary ,
+            total_incentive_paid
+            );
         }
 
-        private static String getConsolidatedReportTileFormat(String month , int daysInMonth , int pageIndex ,  int year , String establishmentName , String address , int estCode ){
+        private static String getConsolidatedReportTileFormat(
+            String month ,
+            int daysInMonth ,
+            int pageIndex ,
+            int year ,
+            String establishmentName ,
+            String address ,
+            int estCode
+            ){
             /*
              * estCode : pfRegNumber
              */
@@ -33,16 +122,16 @@ class Manager {
         }
 
 
-        private static String getStandaloneReportTileFormat(){
+    //     private static String getStandaloneReportTileFormat(){
 
-        }
-       private static String getStandaloneReportInnerFormat(){
+    //     }
+    //    private static String getStandaloneReportInnerFormat(){
 
-        }
+    //     }
 
 
 
-        static void generateReport(long pfRegNumber , int year , String month , String regionOptional){
+        static void generateReport(long pfRegNumber , int year , String month , String regionOptional) throws  SQLException{
 
             /*
              * 2 * word documents required to be created
@@ -56,16 +145,139 @@ class Manager {
              *
              *
              * watch the calculations and them take steps
+             *
+             *
+             * FIRST :
+             * get the total format and set the required variables
+             * do for consolidated then do for standalone
              */
+
+
+            int pageIndex = 1;
+            int employeeIndex = 0 , employeeIndexAccurator = -1;
+
+
+            XWPFDocument consolidatedPayslip = new XWPFDocument();
+
+            String consolidatedReportTitle;
+            String consolidatedInnerData;
+            String consolidatedReportNetTotal;
+
+            // Establishment details for header
+            ResultSet estab = (ResultSet)Manager.getEstablishmentDetails(pfRegNumber);
+
+
+            // establishing employee connection before quering
+            Manager.initiateEmployeesConnection(pfRegNumber, year, month , regionOptional);
+            ResultSet emp = (ResultSet)EmployeeDatabaseHandler.getAllEmployeeDetails();
+            ResultSet emp_sum = (ResultSet)EmployeeDatabaseHandler.getSumTotal();
+
+
+
 
             try {
 
+                while ( emp.next()){
+                    if (employeeIndex % 8 == 0) {
+                        consolidatedReportTitle = getConsolidatedReportTileFormat(month, (int) emp.getDouble("totalDays"), pageIndex++, year, estab.getString("companyName"), estab.getString("address"), estab.getInt("pfRegNumber"));
+
+
+                        XWPFParagraph header = consolidatedPayslip.createParagraph();
+                        header.setAlignment(ParagraphAlignment.CENTER);
+                        header.createRun().setText(consolidatedReportTitle);
+
+                        employeeIndexAccurator++;
+                    }
+                    else{
+                        consolidatedInnerData = getConsolidatedReportInnerFormat(
+                            employeeIndex  - employeeIndexAccurator ,
+                            (long) estab.getInt("esicRegNumber") ,
+                            emp.getString("name")  ,
+                            emp.getDouble("basic") ,
+                            emp.getDouble("hra") ,
+                            emp.getDouble("convence")  ,
+                            emp.getDouble("washingAllowance") ,
+                            emp.getDouble("overtime") ,
+                            emp.getDouble("totalSalary") ,
+                            emp.getDouble("pf_salary") ,
+                            emp.getDouble("esicDeduction") ,
+                            emp.getDouble("pfDeduction") ,
+                            emp.getDouble("totalDeduction") ,
+                            emp.getDouble("netPayableAmount") ,
+                            emp.getString("father/husband_name") ,
+                            emp.getDouble("esic_salary") ,
+                            (int) ( emp.getDouble("memberId") % 100000000  ) ,
+                            (int) ( emp.getDouble("attendance")) ,
+                            (int) ( emp.getDouble("attendance")) ,
+                            0 ,
+                            emp.getDouble("calc_basic") ,
+                            emp.getDouble("calc_hra") ,
+                            emp.getDouble("calc_convence") ,
+                            emp.getDouble("calc_washingAllowance") ,
+                            emp.getDouble("calc_overtime") ,
+                            emp.getDouble("calc_salary") ,
+                            (long) emp.getInt("uan") ,
+                            emp.getDouble("calc_incentive")
+                        );
+                        XWPFParagraph data = consolidatedPayslip.createParagraph();
+                        data.setAlignment(ParagraphAlignment.BOTH);
+                        data.createRun().setText(consolidatedInnerData);
+                    }
+
+                    employeeIndex++;
+
+                }
 
 
 
 
-            } catch (Exception e) {
+
+
+                consolidatedReportNetTotal = getConsolidatedReportNetTotal(
+                    emp_sum.getDouble("sum_basic") ,
+                    emp_sum.getDouble("sum_hra"),
+                    emp_sum.getDouble("sum_convence"),
+                    emp_sum.getDouble("sum_washingAllowance"),
+                    emp_sum.getDouble("sum_overtime"),
+                    emp_sum.getDouble("sum_totalSalary"),
+                    emp_sum.getDouble("sum_totalDays"),
+                    emp_sum.getDouble("sum_attendance"),
+                    0 ,
+                    emp_sum.getDouble("sum_calc_basic"),
+                    emp_sum.getDouble("sum_calc_hra"),
+                    emp_sum.getDouble("sum_calc_convence"),
+                    emp_sum.getDouble("sum_calc_washingAllowance"),
+                    emp_sum.getDouble("sum_calc_overtime"),
+                    emp_sum.getDouble("sum_calc_salary"),
+                    emp_sum.getDouble("sum_pf_salary"),
+                    emp_sum.getDouble("sum_esicDeduction"),
+                    emp_sum.getDouble("sum_pfDeduction"),
+                    emp_sum.getDouble("sum_totalDeduction"),
+                    emp_sum.getDouble("sum_netPayableAmount"),
+                    emp_sum.getDouble("sum_calc_incentive"),
+                    emp_sum.getDouble("sum_esic_salary")
+                );
+
+
+                XWPFParagraph sum_total = consolidatedPayslip.createParagraph();
+                sum_total.setAlignment(ParagraphAlignment.BOTH);
+                sum_total.createRun().setText(consolidatedReportNetTotal);
+
+
+
+
+
+
+
+
+
+
+
+            } catch (SQLException e) {
                 e.printStackTrace();
+            }
+            finally{
+                Manager.closeEmployeeConnection();
             }
          }
 

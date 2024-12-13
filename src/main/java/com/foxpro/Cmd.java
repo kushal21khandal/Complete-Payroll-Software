@@ -3,6 +3,7 @@ package com.foxpro;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -79,6 +80,7 @@ class Cmd {
         Employees employees;
         int year;
         String month = "", path_pf_csv = "", path_client_csv_optional = "" , region_optional = "";
+        int daysInMonth = 0;
 
 
         // salary structure fields
@@ -337,7 +339,7 @@ class Cmd {
                             month = bufferedReader.readLine().trim();
 
                             print("days in month");
-                            daysInMonth = Integer.parseInt(( bufferedReader.readLine().trim() );
+                            daysInMonth = Integer.parseInt(( bufferedReader.readLine().trim() ));
 
                             print("region ( destrict based ) [ if no region : leave empty ]");
                             region_optional = bufferedReader.readLine().trim();
@@ -371,6 +373,8 @@ class Cmd {
                                 }
                             }
 
+                            
+
                         } else if (userInput.equalsIgnoreCase("add_manually")) {
                             System.out.println(":this is not going to work");
 
@@ -382,6 +386,20 @@ class Cmd {
 
                     }
                 } else if (userInput.equalsIgnoreCase("report")) {
+                    print("pf_reg_number");
+                    pfRegNumber = Long.parseLong(bufferedReader.readLine().trim());
+                    print("year");
+                    year = Integer.parseInt(bufferedReader.readLine().trim());
+                    print("month");
+                    month = bufferedReader.readLine().trim();
+                    print("region ( optional , if no particular region -> leave empty : press [ENTER])");
+                    region_optional = bufferedReader.readLine().trim();
+                    try {
+                        Manager.GenerateReport.generateReport(pfRegNumber , year , month , region_optional.isBlank() ? null : region_optional);
+                    } catch (SQLException exception) {
+                        exception.printStackTrace();
+                    }
+
 
                 } else if (userInput.equalsIgnoreCase("exit") || userInput.equalsIgnoreCase("quit")) {
                     mainState = false;
