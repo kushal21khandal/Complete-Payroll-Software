@@ -404,7 +404,6 @@ class Cmd {
 
                 } else if (userInput.equalsIgnoreCase("exit") || userInput.equalsIgnoreCase("quit")) {
                     mainState = false;
-                    System.gc();
                 } else {
                     System.out.println("command not found , use commands :  est , emp , report , exit/quit\n\n");
                 }
@@ -416,7 +415,6 @@ class Cmd {
             if (inputStreamReader != null) {
                 inputStreamReader.close();
             }
-            System.exit(0);
         }
 
     }
