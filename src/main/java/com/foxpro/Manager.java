@@ -159,6 +159,9 @@ class Manager {
             int pageIndex = 1;
             int employeeIndex = 0 , employeeIndexAccurator = -1;
 
+            int eps_salary = 0 ;
+            int pfDeduction , eps_amount;
+
 
             XWPFDocument consolidatedPayslip = new XWPFDocument();
             FileOutputStream fout = null ;
@@ -244,6 +247,14 @@ class Manager {
                         XWPFParagraph data = consolidatedPayslip.createParagraph();
                         data.setAlignment(ParagraphAlignment.BOTH);
                         data.createRun().setText(consolidatedInnerData);
+
+                        eps_salary = (int)(emp.getDouble("calc_basic") * 8.33) /100;
+                        eps_salary = eps_salary > 15000 ? 15000 : eps_salary ;
+
+                        pfDeduction = (int)emp.getDouble("pfDeduction");
+                        eps_amount = (int)( eps_salary * 15) /100;
+
+                        bufferedWriter.write(emp.getInt("uan")+"#~#"+emp.getString("name") +"#~#" +emp.getDouble("calc_salary") + "#~#" + emp.getDouble("pf_salary") + "#~#" + eps_salary + "#~#" +eps_salary + "#~#" + pfDeduction + "#~#" +  (pfDeduction - eps_amount) + "#~#" + eps_amount + "#~#" + ( emp.getDouble("totalDays") - emp.getDouble("attendance")  )+ "#~#0\n");
 
                         hasNextEmployee = emp.next();
                     }
