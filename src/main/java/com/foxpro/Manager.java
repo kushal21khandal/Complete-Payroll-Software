@@ -1,7 +1,9 @@
 package com.foxpro;
 
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -161,6 +163,9 @@ class Manager {
             XWPFDocument consolidatedPayslip = new XWPFDocument();
             FileOutputStream fout = null ;
 
+
+            FileWriter output = null;
+
             String consolidatedReportTitle;
             String consolidatedInnerData;
             String consolidatedReportNetTotal;
@@ -175,11 +180,26 @@ class Manager {
             ResultSet emp_sum = (ResultSet)EmployeeDatabaseHandler.getSumTotal();
 
 
+            boolean hasNextEmployee = true;
+
+
 
 
             try {
 
-                while ( emp.next()){
+                fout = new FileOutputStream( regionOptional == null ? FileComponentHandler.generatePath(PATH_MAIN , new String[]{"data" , pfRegNumber + "" , year + "" , month ,"combined_" + pfRegNumber + "_" + month + "_" + year + ".docx"}) : FileComponentHandler.generatePath(PATH_MAIN , new String[]{ "data" , pfRegNumber + "" , year + "" , month , regionOptional ,"conbined_" + pfRegNumber + "_" + regionOptional + "_" + month + "_" + year + ".docx"}));
+
+
+                output = new FileWriter( regionOptional == null ? FileComponentHandler.generatePath(PATH_MAIN , new String[]{"data" , pfRegNumber + "" , year + "" , month ,"out_" + pfRegNumber + "_" + month + "_" + year + ".txt"}) : FileComponentHandler.generatePath(PATH_MAIN , new String[]{ "data" , pfRegNumber + "" , year + "" , month , regionOptional ,"out_" + pfRegNumber + "_" + regionOptional + "_" + month + "_" + year + ".txt"}));
+
+                BufferedWriter bufferedWriter = new BufferedWriter(output);
+
+
+                // while ( emp.next()){
+                /* beacause in the execution of first if condition : one employee will get missed */
+                while (hasNextEmployee == true){
+
+
                     if (employeeIndex % 8 == 0) {
                         consolidatedReportTitle = getConsolidatedReportTileFormat(month, (int) emp.getDouble("totalDays"), pageIndex++, year, estab.getString("companyName"), estab.getString("address"), estab.getInt("pfRegNumber"));
 
@@ -224,6 +244,8 @@ class Manager {
                         XWPFParagraph data = consolidatedPayslip.createParagraph();
                         data.setAlignment(ParagraphAlignment.BOTH);
                         data.createRun().setText(consolidatedInnerData);
+
+                        hasNextEmployee = emp.next();
                     }
 
                     employeeIndex++;
@@ -267,9 +289,6 @@ class Manager {
 
 
 
-                fout = new FileOutputStream( regionOptional == null ? FileComponentHandler.generatePath(PATH_MAIN , new String[]{"data" , pfRegNumber + "" , year + "" , month , pfRegNumber + "_" + month + "_" + year + ".docx"}) : FileComponentHandler.generatePath(PATH_MAIN , new String[]{ "data" , pfRegNumber + "" , year + "" , month , regionOptional , pfRegNumber + "_" + regionOptional + "_" + month + "_" + year + ".docx"}));
-
-
                 consolidatedPayslip.write(fout);
 
 
@@ -279,7 +298,7 @@ class Manager {
 
 
 
-
+                bufferedWriter.close();
 
 
             } catch (SQLException e) {
@@ -291,6 +310,11 @@ class Manager {
                     fout.close();
                 }
                 consolidatedPayslip.close();
+
+                if ( output != null){
+                    output.close();
+                }
+
             }
          }
 
