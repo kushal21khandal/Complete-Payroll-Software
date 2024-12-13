@@ -1,9 +1,10 @@
 package com.foxpro;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import javax.naming.spi.DirStateFactory;
 
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -131,7 +132,7 @@ class Manager {
 
 
 
-        static void generateReport(long pfRegNumber , int year , String month , String regionOptional) throws  SQLException{
+        static void generateReport(long pfRegNumber , int year , String month , String regionOptional) throws  SQLException , FileNotFoundException , IOException{
 
             /*
              * 2 * word documents required to be created
@@ -158,6 +159,7 @@ class Manager {
 
 
             XWPFDocument consolidatedPayslip = new XWPFDocument();
+            FileOutputStream fout = null ;
 
             String consolidatedReportTitle;
             String consolidatedInnerData;
@@ -265,6 +267,13 @@ class Manager {
 
 
 
+                fout = new FileOutputStream( regionOptional == null ? FileComponentHandler.generatePath(PATH_MAIN , new String[]{"data" , pfRegNumber + "" , year + "" , month , pfRegNumber + "_" + month + "_" + year + ".docx"}) : FileComponentHandler.generatePath(PATH_MAIN , new String[]{ "data" , pfRegNumber + "" , year + "" , month , regionOptional , pfRegNumber + "_" + regionOptional + "_" + month + "_" + year + ".docx"}));
+
+
+                consolidatedPayslip.write(fout);
+
+
+
 
 
 
@@ -278,6 +287,10 @@ class Manager {
             }
             finally{
                 Manager.closeEmployeeConnection();
+                if ( fout != null){
+                    fout.close();
+                }
+                consolidatedPayslip.close();
             }
          }
 
