@@ -373,7 +373,7 @@ class Cmd {
                                 }
                             }
 
-                            
+
 
                         } else if (userInput.equalsIgnoreCase("add_manually")) {
                             System.out.println(":this is not going to work");
@@ -386,6 +386,7 @@ class Cmd {
 
                     }
                 } else if (userInput.equalsIgnoreCase("report")) {
+                    System.out.println("\n================== GENERATE - REPORT ====================\n");
                     print("pf_reg_number");
                     pfRegNumber = Long.parseLong(bufferedReader.readLine().trim());
                     print("year");
@@ -403,6 +404,7 @@ class Cmd {
 
                 } else if (userInput.equalsIgnoreCase("exit") || userInput.equalsIgnoreCase("quit")) {
                     mainState = false;
+                    System.gc();
                 } else {
                     System.out.println("command not found , use commands :  est , emp , report , exit/quit\n\n");
                 }

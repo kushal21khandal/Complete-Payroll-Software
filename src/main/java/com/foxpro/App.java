@@ -4,11 +4,6 @@ import java.io.IOException;
 
 
 public class App {
-    /*
-     * to - do
-     * Config.getPathToPrntFolder();
-     * EstablishmentDatabaseHandler.initiateConnection() -> to database Main
-      */
 
 
 
