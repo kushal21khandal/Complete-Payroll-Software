@@ -57,10 +57,11 @@ class Employees {
         percentMsl2 = salaryStructure.msl2;
         percentMsl3 = salaryStructure.msl3;
 
+
+        Manager.initiateEmployeesConnection(pfRegNumber, year, month, region_optional);
         Manager.checkAndCreateDir(pfRegNumber, year, month, region_optional);
         Manager.executeCreateTableCommand(pfRegNumber, year, month, region_optional);
         Manager.executeFillTableCommand(pfRegNumber, year, month, region_optional, path_pf_csv);
-        Manager.initiateEmployeesConnection(pfRegNumber, year, month, region_optional);
 
     }
 

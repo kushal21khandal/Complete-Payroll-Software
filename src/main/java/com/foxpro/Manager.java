@@ -18,6 +18,7 @@ import com.foxpro.fileManager.FileComponentHandler;
 
 class Manager {
 
+
     static class GenerateReport {
         /*
          * connection established and closed inside generateReport function
@@ -229,7 +230,7 @@ class Manager {
                             emp.getDouble("pfDeduction") ,
                             emp.getDouble("totalDeduction") ,
                             emp.getDouble("netPayableAmount") ,
-                            emp.getString("father/husband_name") ,
+                            emp.getString("father_husband_name") ,
                             emp.getDouble("esic_salary") ,
                             (int) ( emp.getDouble("memberId") % 100000000  ) ,
                             (int) ( emp.getDouble("attendance")) ,

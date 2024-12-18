@@ -35,5 +35,10 @@ class Config{
     }
 
 
+    public static String getPathLogFile(){
+        return properties.getProperty("pathLogFile");
+    }
+
+
 
 }

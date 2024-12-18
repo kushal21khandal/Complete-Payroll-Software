@@ -13,3 +13,23 @@ opening  the connection when we type the input 'emp' in the cmd and closing the 
 
 
 there is no need for clientCSV as all the data will be uploaded in one csv file using code only
+
+
+
+this is on how to add logs to a .log file in java
+    public static final Logger logger  = Logger.getLogger("autowork");
+    private FileHandler logFile = null;
+
+    Cmd(){
+
+        try {
+            logFile = new FileHandler(Config.getPathLogFile());
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        logFile.setFormatter(new SimpleFormatter());
+        logger.addHandler(logFile);
+    }
+
+
+    # DO not forget to close the fileHandler connection

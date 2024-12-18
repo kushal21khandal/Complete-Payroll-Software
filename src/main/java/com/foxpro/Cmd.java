@@ -9,6 +9,7 @@ import java.util.HashMap;
 
 class Cmd {
 
+    
     HashMap<Long, Establishment> activeSessions = new HashMap<>();
 
     public void print(String string) {
@@ -101,6 +102,7 @@ class Cmd {
             System.out.println("######### AUTOMATING THE FOXPRO ##########\n\n");
 
             System.out.println("path_to_prnt_folder : " + pathMain + "\n");
+            Manager.initiateMainConnection();
 
             while (mainState == true) {
                 command = "cmd";
@@ -115,7 +117,7 @@ class Cmd {
                     command = "estab";
 
                     // opening the connection
-                    Manager.initiateMainConnection();
+                    // Manager.initiateMainConnection();
 
                     while (establishmentState) {
                         System.out.println("\n================== ADD / UPDATE - ESTABLISHMENT ====================\n");
@@ -307,7 +309,6 @@ class Cmd {
                             }
                         } else if (userInput.equalsIgnoreCase("quit") || userInput.equalsIgnoreCase("exit")) {
                             //closing the connection
-                            Manager.closeMainConnection();
                             establishmentState = false;
                         } else {
                             System.out.println("command not found , use [ add / update ] for adding or updating establishments");
@@ -412,9 +413,13 @@ class Cmd {
         } catch (IOException exception) {
             exception.printStackTrace();
         } finally {
+            Manager.closeMainConnection();
             if (inputStreamReader != null) {
                 inputStreamReader.close();
             }
+            // if ( logFile != null){
+            //     logFile.close();
+            // }
         }
 
     }
