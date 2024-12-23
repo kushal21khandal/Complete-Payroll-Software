@@ -157,11 +157,11 @@ class Employees {
                 logger.log(Level.INFO, "washing allowance % : {0}", percentWashingAllowance);
                 logger.log(Level.INFO, "overtime % : {0}", percentOvertime);
 
-                total_basic = (total_salary * percentBasic) / 100;
-                total_hra = (total_salary * percentHra) / 100;
-                total_conv = (total_salary * percentConv) / 100;
-                total_washingAllowance = (total_salary * percentWashingAllowance) / 100;
-                total_overtime = (total_salary * percentOvertime) / 100;
+                total_basic = Math.ceil( (total_salary * percentBasic) / 100 );
+                total_hra = Math.ceil( (total_salary * percentHra) / 100 );
+                total_conv =Math.ceil ( (total_salary * percentConv) / 100 );
+                total_washingAllowance = Math.ceil( (total_salary * percentWashingAllowance) / 100 );
+                total_overtime = Math.ceil( (total_salary * percentOvertime) / 100 );
 
                 logger.log(Level.INFO , "total basic : {0}" , total_basic);
                 logger.log(Level.INFO , "total hra : {0}" , total_hra);
@@ -169,11 +169,11 @@ class Employees {
                 logger.log(Level.INFO , "total washingAllowance : {0}" , total_washingAllowance);
                 logger.log(Level.INFO , "total overtime : {0}" , total_overtime);
 
-                calc_basic = (total_basic * attendance) / daysInMonth;
-                calc_hra = (total_hra * attendance) / daysInMonth;
-                calc_conv = (total_conv * attendance) / daysInMonth;
-                calc_overtime = (total_overtime * attendance) / daysInMonth;
-                calc_washingAllowance = (total_washingAllowance * attendance) / daysInMonth;
+                calc_basic = Math.ceil( (total_basic * attendance) / daysInMonth );
+                calc_hra = Math.ceil( (total_hra * attendance) / daysInMonth );
+                calc_conv = Math.ceil( (total_conv * attendance) / daysInMonth );
+                calc_overtime = Math.ceil( (total_overtime * attendance) / daysInMonth );
+                calc_washingAllowance = Math.ceil( (total_washingAllowance * attendance) / daysInMonth );
 
                 logger.log(Level.INFO , "calc basic : {0}" , calc_basic);
                 logger.log(Level.INFO , "calc hra : {0}" , calc_hra);
@@ -182,20 +182,20 @@ class Employees {
                 logger.log(Level.INFO , "calc overtime : {0}" , calc_overtime);
 
                 pf_salary = calc_basic;
-                esic_salary = (calc_basic + calc_hra + calc_conv + calc_overtime);
-                calc_salary = (esic_salary + calc_washingAllowance + calc_incentive);
+                esic_salary = Math.ceil( (calc_basic + calc_hra + calc_conv + calc_overtime) );
+                calc_salary = Math.ceil( (esic_salary + calc_washingAllowance + calc_incentive) );
 
                 logger.log(Level.INFO , "esic_salary : {0}" , esic_salary);
                 logger.log(Level.INFO , "calc_salary : {0}" , calc_salary);
 
-                pf_deduction = (pf_salary * PF_DEDUCTION_RATE) / 100;
-                esic_deduction = (esic_salary * ESIC_DEDUCTION_RATE) / 100;
+                pf_deduction = Math.ceil( (pf_salary * PF_DEDUCTION_RATE) / 100 );
+                esic_deduction = Math.ceil( (esic_salary * ESIC_DEDUCTION_RATE) / 100 );
 
                 logger.log(Level.INFO , "pf Deduction : {0}" , pf_deduction);
                 logger.log(Level.INFO , "esic Deduction : {0}" , esic_deduction);
 
-                total_deduction = (pf_deduction + esic_deduction);
-                netPayableAmount = (calc_salary - total_deduction);
+                total_deduction = Math.ceil( (pf_deduction + esic_deduction) );
+                netPayableAmount =Math.ceil (calc_salary - total_deduction);
 
                 logger.log(Level.INFO , "total deduction : {0}" , total_deduction);
                 logger.log(Level.INFO , "Net Payable Amount : {0}" , netPayableAmount);
@@ -275,27 +275,27 @@ class Employees {
                         System.out.println("empty client csv file");
                         break;
                     }
-                    total_basic = (total_salary * percentBasic) / 100;
-                    total_hra = (total_salary * percentHra) / 100;
-                    total_conv = (total_salary * percentConv) / 100;
-                    total_washingAllowance = (total_salary * percentWashingAllowance) / 100;
-                    total_overtime = (total_salary * percentOvertime) / 100;
+                    total_basic = Math.ceil( (total_salary * percentBasic) / 100 );
+                    total_hra =Math.ceil (total_salary * percentHra) / 100;
+                    total_conv =Math.ceil (total_salary * percentConv) / 100;
+                    total_washingAllowance = Math.ceil( (total_salary * percentWashingAllowance) / 100 );
+                    total_overtime = Math.ceil( (total_salary * percentOvertime) / 100 );
 
-                    calc_basic = (total_basic * attendance) / daysInMonth;
-                    calc_hra = (total_hra * attendance) / daysInMonth;
-                    calc_conv = (total_conv * attendance) / daysInMonth;
-                    calc_overtime = (total_overtime * attendance) / daysInMonth;
-                    calc_washingAllowance = (total_washingAllowance * attendance) / daysInMonth;
+                    calc_basic = Math.ceil( (total_basic * attendance) / daysInMonth );
+                    calc_hra = Math.ceil( (total_hra * attendance) / daysInMonth );
+                    calc_conv = Math.ceil( (total_conv * attendance) / daysInMonth );
+                    calc_overtime = Math.ceil( (total_overtime * attendance) / daysInMonth );
+                    calc_washingAllowance = Math.ceil( (total_washingAllowance * attendance) / daysInMonth );
 
                     pf_salary = calc_basic;
-                    esic_salary = (calc_basic + calc_hra + calc_conv + calc_overtime);
-                    calc_salary = (esic_salary + calc_washingAllowance + calc_incentive);
+                    esic_salary = Math.ceil( (calc_basic + calc_hra + calc_conv + calc_overtime) );
+                    calc_salary = Math.ceil( (esic_salary + calc_washingAllowance + calc_incentive) );
 
-                    pf_deduction = (pf_salary * PF_DEDUCTION_RATE) / 100;
-                    esic_deduction = (esic_salary * ESIC_DEDUCTION_RATE) / 100;
+                    pf_deduction = Math.ceil( (pf_salary * PF_DEDUCTION_RATE) / 100 );
+                    esic_deduction = Math.ceil( (esic_salary * ESIC_DEDUCTION_RATE) / 100 );
 
-                    total_deduction = (pf_deduction + esic_deduction);
-                    netPayableAmount = (calc_salary - total_deduction);
+                    total_deduction = Math.ceil( (pf_deduction + esic_deduction) );
+                    netPayableAmount = Math.ceil( (calc_salary - total_deduction) );
 
 
                     EmployeeDatabaseHandler.insertEmployeeDetails(

@@ -4,7 +4,6 @@ import java.io.IOException;
 
 public class App {
 
-
     public static void run() {
         try {
             Logs logs = new Logs();

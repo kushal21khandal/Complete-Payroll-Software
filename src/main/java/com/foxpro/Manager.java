@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
 
 import com.foxpro.databaseManager.EmployeeDatabaseHandler;
 import com.foxpro.databaseManager.EstablishmentDatabaseHandler;
@@ -28,62 +29,62 @@ class Manager {
             int employeeIndex ,
             long esicRegNumber ,
             String employeeName ,
-            double basic ,
-            double hra ,
-            double conv ,
-            double washingAllowance ,
-            double hardDuty ,
-            double totalWithoutReduction ,
-            double pfSalary ,
-            double esicAdvance ,
-            double pfDeduction ,
-            double totalDeduction ,
-            double netPayableAmount ,
+            int basic ,
+            int hra ,
+            int conv ,
+            int washingAllowance ,
+            int hardDuty ,
+            int totalWithoutReduction ,
+            int pfSalary ,
+            int esicAdvance ,
+            int pfDeduction ,
+            int totalDeduction ,
+            int netPayableAmount ,
             String fahtersName ,
-            double esicSalary ,
+            int esicSalary ,
             int pfAccNo ,
             int daysWorked ,
             int actualDays ,
             int complementaryDays ,
-            double calcBasic ,
-            double calcHra ,
-            double calcConv ,
-            double calcWashing ,
-            double calcHardDuty ,
-            double calcTotal ,
+            int calcBasic ,
+            int calcHra ,
+            int calcConv ,
+            int calcWashing ,
+            int calcHardDuty ,
+            int calcTotal ,
             long uanNo ,
-            double incentive
+            int incentive
             ){
 
-            return String.format(" %d   %d      %s              %f    %f    %f    %f    %f          %f    %f       %f     %f  -          %f      %f\n                     %s                                                                 %f      -       -     -\n               %d %d=%d        +  %d      %f    %f     %f    %f    %f          %f                            -\n%d           0.0                                         %f\n                                                      0    %f\n _________________________________________________________________________________________________________________________________________________________\n"
+            return String.format(" %d   %d      %s              %d    %d    %d    %d    %d          %d    %d       %d     %d  -          %d      %d\n                     %s                                                                 %d      -       -     -\n               %d %d=%d        +  %d      %d    %d     %d    %d    %d          %d                            -\n%d           0.0                                         %d\n                                                      0    %d\n _________________________________________________________________________________________________________________________________________________________\n"
             , employeeIndex , esicRegNumber , employeeName , basic ,hra , conv , washingAllowance , hardDuty , totalWithoutReduction , pfSalary , esicAdvance , pfDeduction , totalDeduction , netPayableAmount , fahtersName , esicSalary , pfAccNo , daysWorked , actualDays , complementaryDays , calcBasic , calcHra , calcConv , calcWashing , calcHardDuty , calcTotal , uanNo ,  incentive , incentive);
         }
 
         private static String getConsolidatedReportNetTotal(
-            double total_basic ,
-            double hra ,
-            double conv ,
-            double washingAllowance ,
-            double hardDuty ,
-            double total_salary ,
-            double daysWorked ,
-            double actualDays ,
-            double complementaryDays ,
-            double calc_basic ,
-            double calc_hra ,
-            double calc_conv ,
-            double calc_washingAllowance ,
-            double calc_hardDuty ,
-            double calcTotal ,
-            double pfSalary ,
-            double esicAdvance ,
-            double pf_deduction ,
-            double total_deduction ,
-            double netPayableAmount ,
-            double total_incentive_paid ,
-            double total_esic_salary
+            int total_basic ,
+            int hra ,
+            int conv ,
+            int washingAllowance ,
+            int hardDuty ,
+            int total_salary ,
+            int daysWorked ,
+            int actualDays ,
+            int complementaryDays ,
+            int calc_basic ,
+            int calc_hra ,
+            int calc_conv ,
+            int calc_washingAllowance ,
+            int calc_hardDuty ,
+            int calcTotal ,
+            int pfSalary ,
+            int esicAdvance ,
+            int pf_deduction ,
+            int total_deduction ,
+            int netPayableAmount ,
+            int total_incentive_paid ,
+            int total_esic_salary
         ){
-            return String.format("\n===================================================================================================================================================================\n                                                 %f   %f  %f   %f   %f         %f\n       NET TOTAL  %f %f+   0.0+  %f    %f   %f  %f   %f   %f         %f  %f     %f   %f      0    %f    %f\n                            0.0+   0.0                    %f                                        %f                0      0\n                                                      0   %f                                                                     0\n ===================================================================================================================================================================\n" ,
+            return String.format("\n===================================================================================================================================================================\n                                                 %d   %d  %d   %d   %d         %d\n       NET TOTAL  %d %d+   0.0+  %d    %d   %d  %d   %d   %d         %d  %d     %d   %d      0    %d    %d\n                            0.0+   0.0                    %d                                        %d                0      0\n                                                      0   %d                                                                     0\n ===================================================================================================================================================================\n" ,
              total_basic ,
              hra ,
              conv ,
@@ -164,6 +165,11 @@ class Manager {
             int pfDeduction , eps_amount;
 
 
+            XWPFRun headerRun ;
+            XWPFRun dataRun;
+            XWPFRun sum_totalRun;
+
+
             XWPFDocument consolidatedPayslip = new XWPFDocument();
             FileOutputStream fout = null ;
 
@@ -210,7 +216,10 @@ class Manager {
 
                         XWPFParagraph header = consolidatedPayslip.createParagraph();
                         header.setAlignment(ParagraphAlignment.CENTER);
-                        header.createRun().setText(consolidatedReportTitle);
+                        headerRun = header.createRun();
+                        headerRun.setText(consolidatedReportTitle);
+                        headerRun.setFontFamily("Courier New");
+                        headerRun.setFontSize(8);
 
                         employeeIndexAccurator++;
                     }
@@ -219,35 +228,39 @@ class Manager {
                             employeeIndex  - employeeIndexAccurator ,
                             (long) estab.getInt("esicRegNumber") ,
                             emp.getString("name")  ,
-                            emp.getDouble("basic") ,
-                            emp.getDouble("hra") ,
-                            emp.getDouble("convence")  ,
-                            emp.getDouble("washingAllowance") ,
-                            emp.getDouble("overtime") ,
-                            emp.getDouble("totalSalary") ,
-                            emp.getDouble("pf_salary") ,
-                            emp.getDouble("esicDeduction") ,
-                            emp.getDouble("pfDeduction") ,
-                            emp.getDouble("totalDeduction") ,
-                            emp.getDouble("netPayableAmount") ,
+                            (int)emp.getDouble("basic") ,
+                            (int)emp.getDouble("hra") ,
+                            (int)emp.getDouble("convence")  ,
+                            (int)emp.getDouble("washingAllowance") ,
+                            (int)emp.getDouble("overtime") ,
+                            (int)emp.getDouble("totalSalary") ,
+                            (int)emp.getDouble("pf_salary") ,
+                            (int)emp.getDouble("esicDeduction") ,
+                            (int)emp.getDouble("pfDeduction") ,
+                            (int)emp.getDouble("totalDeduction") ,
+                            (int)emp.getDouble("netPayableAmount") ,
                             emp.getString("father_husband_name") ,
-                            emp.getDouble("esic_salary") ,
+                            (int)emp.getDouble("esic_salary") ,
                             (int) ( emp.getDouble("memberId") % 100000000  ) ,
                             (int) ( emp.getDouble("attendance")) ,
                             (int) ( emp.getDouble("attendance")) ,
                             0 ,
-                            emp.getDouble("calc_basic") ,
-                            emp.getDouble("calc_hra") ,
-                            emp.getDouble("calc_convence") ,
-                            emp.getDouble("calc_washingAllowance") ,
-                            emp.getDouble("calc_overtime") ,
-                            emp.getDouble("calc_salary") ,
+                            (int)emp.getDouble("calc_basic") ,
+                            (int)emp.getDouble("calc_hra") ,
+                            (int)emp.getDouble("calc_convence") ,
+                            (int)emp.getDouble("calc_washingAllowance") ,
+                            (int)emp.getDouble("calc_overtime") ,
+                            (int)emp.getDouble("calc_salary") ,
                             (long) emp.getInt("uan") ,
-                            emp.getDouble("calc_incentive")
+                            (int)emp.getDouble("calc_incentive")
                         );
                         XWPFParagraph data = consolidatedPayslip.createParagraph();
                         data.setAlignment(ParagraphAlignment.BOTH);
-                        data.createRun().setText(consolidatedInnerData);
+                        // data.createRun().setText(consolidatedInnerData);
+                        dataRun = data.createRun();
+                        dataRun.setText(consolidatedInnerData);
+                        dataRun.setFontFamily("Courier New");
+                        dataRun.setFontSize(8);
 
                         eps_salary = (int)(emp.getDouble("calc_basic") * 8.33) /100;
                         eps_salary = eps_salary > 15000 ? 15000 : eps_salary ;
@@ -270,34 +283,37 @@ class Manager {
 
 
                 consolidatedReportNetTotal = getConsolidatedReportNetTotal(
-                    emp_sum.getDouble("sum_basic") ,
-                    emp_sum.getDouble("sum_hra"),
-                    emp_sum.getDouble("sum_convence"),
-                    emp_sum.getDouble("sum_washingAllowance"),
-                    emp_sum.getDouble("sum_overtime"),
-                    emp_sum.getDouble("sum_totalSalary"),
-                    emp_sum.getDouble("sum_totalDays"),
-                    emp_sum.getDouble("sum_attendance"),
+                    (int)emp_sum.getDouble("sum_basic") ,
+                    (int)emp_sum.getDouble("sum_hra"),
+                    (int)emp_sum.getDouble("sum_convence"),
+                    (int)emp_sum.getDouble("sum_washingAllowance"),
+                    (int)emp_sum.getDouble("sum_overtime"),
+                    (int)emp_sum.getDouble("sum_totalSalary"),
+                    (int)emp_sum.getDouble("sum_totalDays"),
+                    (int)emp_sum.getDouble("sum_attendance"),
                     0 ,
-                    emp_sum.getDouble("sum_calc_basic"),
-                    emp_sum.getDouble("sum_calc_hra"),
-                    emp_sum.getDouble("sum_calc_convence"),
-                    emp_sum.getDouble("sum_calc_washingAllowance"),
-                    emp_sum.getDouble("sum_calc_overtime"),
-                    emp_sum.getDouble("sum_calc_salary"),
-                    emp_sum.getDouble("sum_pf_salary"),
-                    emp_sum.getDouble("sum_esicDeduction"),
-                    emp_sum.getDouble("sum_pfDeduction"),
-                    emp_sum.getDouble("sum_totalDeduction"),
-                    emp_sum.getDouble("sum_netPayableAmount"),
-                    emp_sum.getDouble("sum_calc_incentive"),
-                    emp_sum.getDouble("sum_esic_salary")
+                    (int)emp_sum.getDouble("sum_calc_basic"),
+                    (int)emp_sum.getDouble("sum_calc_hra"),
+                    (int)emp_sum.getDouble("sum_calc_convence"),
+                    (int)emp_sum.getDouble("sum_calc_washingAllowance"),
+                    (int)emp_sum.getDouble("sum_calc_overtime"),
+                    (int)emp_sum.getDouble("sum_calc_salary"),
+                    (int)emp_sum.getDouble("sum_pf_salary"),
+                    (int)emp_sum.getDouble("sum_esicDeduction"),
+                    (int)emp_sum.getDouble("sum_pfDeduction"),
+                    (int)emp_sum.getDouble("sum_totalDeduction"),
+                    (int)emp_sum.getDouble("sum_netPayableAmount"),
+                    (int)emp_sum.getDouble("sum_calc_incentive"),
+                    (int)emp_sum.getDouble("sum_esic_salary")
                 );
 
 
                 XWPFParagraph sum_total = consolidatedPayslip.createParagraph();
                 sum_total.setAlignment(ParagraphAlignment.BOTH);
-                sum_total.createRun().setText(consolidatedReportNetTotal);
+                sum_totalRun = sum_total.createRun();
+                sum_totalRun.setText(consolidatedReportNetTotal);
+                sum_totalRun.setFontFamily("Courier New");
+                sum_totalRun.setFontSize(8);
 
 
 

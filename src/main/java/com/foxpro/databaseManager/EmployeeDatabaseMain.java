@@ -82,7 +82,7 @@ class EmployeeDatabaseMain {
     static Object getSumTotal(Connection conn) throws  SQLException{
 
         String query = "SELECT sum(basic) as sum_basic , sum(hra) as sum_hra , sum(convence) as sum_convence , sum(washingAllowance) as sum_washingAllowance , sum(overtime) as sum_overtime , sum(totalSalary) as sum_totalSalary , sum(totalDays) as sum_totalDays , sum(attendance) as sum_attendance , sum(calc_basic) as sum_calc_basic , sum(calc_hra) as sum_calc_hra , sum(calc_convence) as sum_calc_convence , sum(calc_washingAllowance) as sum_calc_washingAllowance , sum(calc_overtime) as sum_calc_overtime , sum(calc_salary) as sum_calc_salary , sum(pf_salary) as sum_pf_salary , sum(esicDeduction) as sum_esicDeduction , sum(pfDeduction) as sum_pfDeduction , sum(totalDeduction) as sum_totalDeduction , sum(netPayableAmount) as sum_netPayableAmount , sum(calc_incentive) as sum_calc_incentive , sum(esic_salary) as sum_esic_salary from data";
-        PreparedStatement preparedStatement = conn.prepareCall(query);
+        PreparedStatement preparedStatement = conn.prepareStatement(query);
         return preparedStatement.executeQuery();
 
     }
@@ -96,7 +96,7 @@ class EmployeeDatabaseMain {
         preparedStatement.setLong(i , Long.parseLong(lineArr[i-1]));
 
 
-        while(++i <= lineArr.length){
+        while(++i < lineArr.length){
             preparedStatement.setString(i , lineArr[i -1 ]);
         }
         // preparedStatement.setString(2 , lineArr[1]);

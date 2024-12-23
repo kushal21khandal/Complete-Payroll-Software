@@ -23,9 +23,9 @@ public class EmployeeDatabaseHandler {
         try {
             if (conn == null) {
                 conn = getConnection(mainDatabasePath);
-                System.out.println("database connection established");
+                System.out.println("_EMP... : database connection established");
             } else {
-                System.out.println("connection already open");
+                System.out.println("_EMP... : connection already open");
             }
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
@@ -37,7 +37,7 @@ public class EmployeeDatabaseHandler {
         try {
             if (conn != null) {
                 conn.close();
-                System.out.println("database connection closed.");
+                System.out.println("_EMP... : database connection closed.");
             }
         } catch (SQLException exception) {
             exception.printStackTrace();
