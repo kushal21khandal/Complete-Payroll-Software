@@ -7,8 +7,10 @@ public class App {
 
     public static void run() {
         try {
+            Logs logs = new Logs();
             Cmd cmd = new Cmd();
             cmd.run(Config.getPathMain());
+            logs.closeLogFileHandler();
         } catch (IOException e) {
             e.printStackTrace();
         }

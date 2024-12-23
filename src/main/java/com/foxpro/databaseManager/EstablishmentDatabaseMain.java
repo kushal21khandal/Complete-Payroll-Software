@@ -88,19 +88,20 @@ class EstablishmentDatabaseMain {
     // pf reg no. nhi daala
     public static void updateSalaryStructure( Connection conn , long pfRegNumber , double basic , double hra , double convence , double overtime , double washingAllowance , double msl1 , double msl2 , double msl3) throws SQLException{
 
-        String query = "REPLACE longO salaryStructure(basic , hra , convence , overtime , washingAllowance , msl1 , msl2 , msl3 , lastModifiedOn) VALUES ( ? , ? , ? , ? , ? , ? , ? , ? , ?) where pfRegNumber = ?";
+        // updates or inserts entry
+        String query = "REPLACE INTO salaryStructure(pfRegNumber , basic , hra , convence , overtime , washingAllowance , msl1 , msl2 , msl3 , lastModifiedOn) VALUES ( ? , ? , ? , ? , ? , ? , ? , ? , ? , ?)";
 
         PreparedStatement preparedStatement = conn.prepareStatement(query);
-        preparedStatement.setDouble(1, basic);
-        preparedStatement.setDouble(2, hra);
-        preparedStatement.setDouble(3, convence);
-        preparedStatement.setDouble(4, overtime);
-        preparedStatement.setDouble(5, washingAllowance);
-        preparedStatement.setDouble(6, msl1);
-        preparedStatement.setDouble(7, msl2);
-        preparedStatement.setDouble(8, msl3);
-        preparedStatement.setString(9,  DateTimeFormatter.ofPattern("dd/MM/yyyy").format(LocalDate.now()));
-        preparedStatement.setLong(10, pfRegNumber);
+        preparedStatement.setLong(1, pfRegNumber);
+        preparedStatement.setDouble(2, basic);
+        preparedStatement.setDouble(3, hra);
+        preparedStatement.setDouble(4, convence);
+        preparedStatement.setDouble(5, overtime);
+        preparedStatement.setDouble(6, washingAllowance);
+        preparedStatement.setDouble(7, msl1);
+        preparedStatement.setDouble(8, msl2);
+        preparedStatement.setDouble(9, msl3);
+        preparedStatement.setString(10,  DateTimeFormatter.ofPattern("dd/MM/yyyy").format(LocalDate.now()));
 
         preparedStatement.executeUpdate();
     }

@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 class Cmd {
 
-    
+
     HashMap<Long, Establishment> activeSessions = new HashMap<>();
 
     public void print(String string) {
@@ -380,6 +380,7 @@ class Cmd {
                             System.out.println(":this is not going to work");
 
                         } else if (userInput.equalsIgnoreCase("quit") || userInput.equalsIgnoreCase("exit")) {
+                            Manager.closeEmployeeConnection();
                             employeeState = false;
                         } else {
                             System.out.println("command not found , use  [add / add_manually] for adding employeess ");

@@ -3,10 +3,16 @@ package com.foxpro;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.foxpro.databaseManager.EmployeeDatabaseHandler;
 
 class Employees {
+
+
+    private static final Logger logger = Logs.logger;
+
 
     /*
      * connection for employees
@@ -38,6 +44,9 @@ class Employees {
     final double ESIC_DEDUCTION_RATE = Config.getEsicDeductionPercentage();
 
     Employees(long pfRegNumber, int year, String month, int daysInMonth, String region_optional, String path_pf_csv, String path_client_csv) {
+
+        logger.log(Level.INFO, "Employees.java\n\tpfRegNumber : {0}\n\tyear : {1}\n\tmonth : {2}\n\tdaysInMonth : {3}\n\tregion_optional : {4}\n\tpath_pf_csv : {5}\n\tpath_client_csv : {6}", new Object[]{pfRegNumber, year, month, daysInMonth, region_optional, path_pf_csv, path_client_csv});
+
         this.pfRegNumber = pfRegNumber;
         this.year = year;
         this.month = month;
@@ -58,9 +67,19 @@ class Employees {
         percentMsl3 = salaryStructure.msl3;
 
 
-        Manager.initiateEmployeesConnection(pfRegNumber, year, month, region_optional);
+        // if dir/db exists , else create dir/db
         Manager.checkAndCreateDir(pfRegNumber, year, month, region_optional);
+
+        // now dir & db exists , initiate connection
+        Manager.initiateEmployeesConnection(pfRegNumber, year, month, region_optional);
+
+
+
+        // create table data
         Manager.executeCreateTableCommand(pfRegNumber, year, month, region_optional);
+
+
+        // fill table with provided data
         Manager.executeFillTableCommand(pfRegNumber, year, month, region_optional, path_pf_csv);
 
     }
@@ -131,11 +150,24 @@ class Employees {
                     calc_incentive = 0;
                 }
 
+                logger.info("salary structure details : ");
+                logger.log(Level.INFO, "basic % ; {0}", percentBasic);
+                logger.log(Level.INFO, "hra % : {0}", percentHra);
+                logger.log(Level.INFO, "conv % : {0}", percentConv);
+                logger.log(Level.INFO, "washing allowance % : {0}", percentWashingAllowance);
+                logger.log(Level.INFO, "overtime % : {0}", percentOvertime);
+
                 total_basic = (total_salary * percentBasic) / 100;
                 total_hra = (total_salary * percentHra) / 100;
                 total_conv = (total_salary * percentConv) / 100;
                 total_washingAllowance = (total_salary * percentWashingAllowance) / 100;
                 total_overtime = (total_salary * percentOvertime) / 100;
+
+                logger.log(Level.INFO , "total basic : {0}" , total_basic);
+                logger.log(Level.INFO , "total hra : {0}" , total_hra);
+                logger.log(Level.INFO , "total conv : {0}" , total_conv);
+                logger.log(Level.INFO , "total washingAllowance : {0}" , total_washingAllowance);
+                logger.log(Level.INFO , "total overtime : {0}" , total_overtime);
 
                 calc_basic = (total_basic * attendance) / daysInMonth;
                 calc_hra = (total_hra * attendance) / daysInMonth;
@@ -143,15 +175,30 @@ class Employees {
                 calc_overtime = (total_overtime * attendance) / daysInMonth;
                 calc_washingAllowance = (total_washingAllowance * attendance) / daysInMonth;
 
+                logger.log(Level.INFO , "calc basic : {0}" , calc_basic);
+                logger.log(Level.INFO , "calc hra : {0}" , calc_hra);
+                logger.log(Level.INFO , "calc conv : {0}" , calc_conv);
+                logger.log(Level.INFO , "calc washingAllowance : {0}" , calc_washingAllowance);
+                logger.log(Level.INFO , "calc overtime : {0}" , calc_overtime);
+
                 pf_salary = calc_basic;
                 esic_salary = (calc_basic + calc_hra + calc_conv + calc_overtime);
                 calc_salary = (esic_salary + calc_washingAllowance + calc_incentive);
 
+                logger.log(Level.INFO , "esic_salary : {0}" , esic_salary);
+                logger.log(Level.INFO , "calc_salary : {0}" , calc_salary);
+
                 pf_deduction = (pf_salary * PF_DEDUCTION_RATE) / 100;
                 esic_deduction = (esic_salary * ESIC_DEDUCTION_RATE) / 100;
 
+                logger.log(Level.INFO , "pf Deduction : {0}" , pf_deduction);
+                logger.log(Level.INFO , "esic Deduction : {0}" , esic_deduction);
+
                 total_deduction = (pf_deduction + esic_deduction);
                 netPayableAmount = (calc_salary - total_deduction);
+
+                logger.log(Level.INFO , "total deduction : {0}" , total_deduction);
+                logger.log(Level.INFO , "Net Payable Amount : {0}" , netPayableAmount);
 
                 EmployeeDatabaseHandler.insertEmployeeDetails(
                         new double[]{
@@ -250,6 +297,7 @@ class Employees {
                     total_deduction = (pf_deduction + esic_deduction);
                     netPayableAmount = (calc_salary - total_deduction);
 
+
                     EmployeeDatabaseHandler.insertEmployeeDetails(
                             new double[]{
                                 total_salary,
@@ -283,7 +331,8 @@ class Employees {
             } catch (IOException exception) {
                 exception.printStackTrace();
             } finally {
-                Manager.closeEmployeeConnection();
+                // Manager.closeEmployeeConnection();
+                /* connection closed inside cmd */
                 if (fileReader != null) {
                     fileReader.close();
                 }
