@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.HashMap;
 
 class Cmd {
@@ -61,7 +60,21 @@ class Cmd {
     }
 
     public void run(String pathMain) throws IOException {
-        String[] months = {"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
+        // String[] months = {"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
+        HashMap<String , Integer> months = new HashMap<>();
+        months.put("JAN", 31);
+        months.put("FEB", 28);
+        months.put("MAR", 31);
+        months.put("APR", 30);
+        months.put("MAY", 31);
+        months.put("JUN", 30);
+        months.put("JUL", 31);
+        months.put("AUG", 31);
+        months.put("SEP", 30);
+        months.put("OCT", 31);
+        months.put("NOV", 30);
+        months.put("DEC", 31);
+
         String command = "";
         Establishment establishment;
         SalaryStructure salaryStructure;
@@ -360,16 +373,17 @@ class Cmd {
                             }
 
 
-                            for (int i =0; i< months.length; i++){
-                                if ( months[i].equals(month)){
+
+                            for (String m : months.keySet()){
+                                if ( m.equals(month)){
                                         employees = new Employees(pfRegNumber , year , month , daysInMonth , region_optional , path_pf_csv , path_client_csv_optional);
                                         employees.addEmployees(bufferedReader);
                                     break;
                                 }
                                 else{
-                                    if (i == (months.length -1)){
+                                    if (m.equals("DEC")){
                                         System.out.println("month not in the correct format , use months from the below list ( CAPITAL LETTERS) ");
-                                        System.out.println(Arrays.toString(months));
+                                        System.out.println(months.keySet());
                                     }
                                 }
                             }
@@ -398,7 +412,18 @@ class Cmd {
                     print("region ( optional , if no particular region -> leave empty : press [ENTER])");
                     region_optional = bufferedReader.readLine().trim();
                     try {
-                        Manager.GenerateReport.generateReport(pfRegNumber , year , month , region_optional.isBlank() ? null : region_optional);
+                            for (String m : months.keySet()){
+                                if (m.equals(month)){
+                                    Manager.GenerateReport.generateReport(pfRegNumber , year , month , region_optional.isBlank() ? null : region_optional, months.get(m));
+                                    break;
+                                }
+                                else{
+                                    if (m.equals("DEC")){
+                                        System.out.println("month not in the correct format , use months from the below list ( CAPITAL LETTERS) ");
+                                        System.out.println(months.keySet());
+                                    }
+                                }
+                            }
                     } catch (SQLException exception) {
                         exception.printStackTrace();
                     }

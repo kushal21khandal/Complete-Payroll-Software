@@ -136,7 +136,7 @@ class Manager {
 
 
 
-        static void generateReport(long pfRegNumber , int year , String month , String regionOptional) throws  SQLException , FileNotFoundException , IOException{
+        static void generateReport(long pfRegNumber , int year , String month , String regionOptional, int daysInMonth) throws  SQLException , FileNotFoundException , IOException{
 
             /*
              * 2 * word documents required to be created
@@ -211,7 +211,7 @@ class Manager {
 
 
                     if (employeeIndex % 8 == 0) {
-                        consolidatedReportTitle = getConsolidatedReportTileFormat(month, (int) emp.getDouble("totalDays"), pageIndex++, year, estab.getString("companyName"), estab.getString("address"), estab.getInt("pfRegNumber"));
+                        consolidatedReportTitle = getConsolidatedReportTileFormat(month, daysInMonth, pageIndex++, year, estab.getString("companyName"), estab.getString("address"), estab.getInt("pfRegNumber"));
 
 
                         XWPFParagraph header = consolidatedPayslip.createParagraph();
@@ -262,13 +262,13 @@ class Manager {
                         dataRun.setFontFamily("Courier New");
                         dataRun.setFontSize(8);
 
-                        eps_salary = (int)(emp.getDouble("calc_basic") * 8.33) /100;
+                        eps_salary = (int)( (emp.getDouble("calc_basic") * 8.33) /100 );
                         eps_salary = eps_salary > 15000 ? 15000 : eps_salary ;
 
                         pfDeduction = (int)emp.getDouble("pfDeduction");
-                        eps_amount = (int)( eps_salary * 15) /100;
+                        eps_amount = (int)( ( eps_salary * 15) /100 );
 
-                        bufferedWriter.write(emp.getInt("uan")+"#~#"+emp.getString("name") +"#~#" +emp.getDouble("calc_salary") + "#~#" + emp.getDouble("pf_salary") + "#~#" + eps_salary + "#~#" +eps_salary + "#~#" + pfDeduction + "#~#" +  (pfDeduction - eps_amount) + "#~#" + eps_amount + "#~#" + ( emp.getDouble("totalDays") - emp.getDouble("attendance")  )+ "#~#0\n");
+                        bufferedWriter.write(emp.getLong("uan")+"#~#"+emp.getString("name").replaceFirst("M(r)?(s)?\s+" , "" ) +"#~#" +(int)emp.getDouble("calc_salary") + "#~#" + (int)emp.getDouble("pf_salary") + "#~#" + eps_salary + "#~#" +eps_salary + "#~#" + pfDeduction + "#~#" +  (pfDeduction - eps_amount) + "#~#" + eps_amount + "#~#" +(int)( emp.getDouble("totalDays") - emp.getDouble("attendance")  )+ "#~#0\n");
 
                         hasNextEmployee = emp.next();
                     }
