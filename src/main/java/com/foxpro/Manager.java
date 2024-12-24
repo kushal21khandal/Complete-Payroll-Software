@@ -55,9 +55,10 @@ class Manager {
             long uanNo ,
             int incentive
             ){
-
-            return String.format(" %d   %d      %s              %d    %d    %d    %d    %d          %d    %d       %d     %d  -          %d      %d\n                     %s                                                                 %d      -       -     -\n               %d %d=%d        +  %d      %d    %d     %d    %d    %d          %d                            -\n%d           0.0                                         %d\n                                                      0    %d\n _________________________________________________________________________________________________________________________________________________________\n"
-            , employeeIndex , esicRegNumber , employeeName , basic ,hra , conv , washingAllowance , hardDuty , totalWithoutReduction , pfSalary , esicAdvance , pfDeduction , totalDeduction , netPayableAmount , fahtersName , esicSalary , pfAccNo , daysWorked , actualDays , complementaryDays , calcBasic , calcHra , calcConv , calcWashing , calcHardDuty , calcTotal , uanNo ,  incentive , incentive);
+            // return String.format(" %d   %d      %s              %d    %d    %d    %d    %d          %d    %d       %d     %d  -          %d      %d\n                     %s                                                                 %d      -       -     -\n               %d %d=%d        +  %d      %d    %d     %d    %d    %d          %d                            -\n%d           0.0                                         %d\n                                                      0    %d\n _________________________________________________________________________________________________________________________________________________________\n"
+            // , employeeIndex , esicRegNumber , employeeName , basic ,hra , conv , washingAllowance , hardDuty , totalWithoutReduction , pfSalary , esicAdvance , pfDeduction , totalDeduction , netPayableAmount , fahtersName , esicSalary , pfAccNo , daysWorked , actualDays , complementaryDays , calcBasic , calcHra , calcConv , calcWashing , calcHardDuty , calcTotal , uanNo ,  incentive , incentive);
+            return String.format(" %d   %s      %s              %d    %d    %d    %d    %d          %d    %d       %d     %d  -          %d      %d\n                     %s                                                                 %d      -       -     -\n               %d %d.0=%d.0        +  %d.0      %d    %d     %d    %d    %d          %d                            -\n     %d           0.0                            %d\n                                                      0    %d\n _________________________________________________________________________________________________________________________________________________________\n"
+            , employeeIndex , esicRegNumber + "" , employeeName , basic ,hra , conv , washingAllowance , hardDuty , totalWithoutReduction , pfSalary , esicAdvance , pfDeduction , totalDeduction , netPayableAmount , fahtersName , esicSalary , pfAccNo , daysWorked , actualDays , complementaryDays , calcBasic , calcHra , calcConv , calcWashing , calcHardDuty , calcTotal , uanNo ,  incentive , incentive);
         }
 
         private static String getConsolidatedReportNetTotal(
@@ -84,7 +85,33 @@ class Manager {
             int total_incentive_paid ,
             int total_esic_salary
         ){
-            return String.format("\n===================================================================================================================================================================\n                                                 %d   %d  %d   %d   %d         %d\n       NET TOTAL  %d %d+   0.0+  %d    %d   %d  %d   %d   %d         %d  %d     %d   %d      0    %d    %d\n                            0.0+   0.0                    %d                                        %d                0      0\n                                                      0   %d                                                                     0\n ===================================================================================================================================================================\n" ,
+
+            // return String.format("\n===================================================================================================================================================================\n                                                 %d   %d  %d   %d   %d         %d\n       NET TOTAL  %d %d+   0.0+  %d    %d   %d  %d   %d   %d         %d  %d     %d   %d      0    %d    %d\n                            0.0+   0.0                    %d                                        %d                0      0\n                                                      0   %d                                                                     0\n ===================================================================================================================================================================\n" ,
+             return String.format(" ===================================================================================================================================================================\n                                                 %d   %d  %d   %d   %d         %d\n       NET TOTAL  %d.00 %d.00+   0.0+  %d.0    %d   %d  %d   %d   %d         %d  %d     %d   %d      0    %d    %d\n                            0.0+   0.0                    %d                                        %d                0      0\n                                                      0   %d                                                                     0\n ===================================================================================================================================================================\n ===================================================================================================================================================================\n  SALARY LIABLITY                                %d   %d  %d   %d   %d         %d\n       NET TOTAL        %d.00+   0.0+  %d.0     %d   %d  %d   %d   %d         %d  %d     %d   %d      0    %d     %d\n                           0.0+   0.0                     %d                                        %d                0      0\n                                                          %d                                                                     0\n===================================================================================================================================================================" ,
+             total_basic ,
+             hra ,
+             conv ,
+             washingAllowance ,
+             hardDuty ,
+             total_salary ,
+             daysWorked ,
+             actualDays ,
+             complementaryDays ,
+             calc_basic ,
+             calc_hra ,
+             calc_conv ,
+             calc_washingAllowance ,
+             calc_hardDuty ,
+             calcTotal ,
+             pfSalary ,
+             esicAdvance ,
+             pf_deduction ,
+             total_deduction ,
+             netPayableAmount ,
+             total_incentive_paid ,
+             total_esic_salary ,
+             total_incentive_paid,
+
              total_basic ,
              hra ,
              conv ,
@@ -123,7 +150,10 @@ class Manager {
             /*
              * estCode : pfRegNumber
              */
-            return String.format("\n                                                   Register of Salary for the Month of %s %d,%d \n                                                                                                            Page %d\n  Name of the Estt. %s\n  Address     %s\n  Est_Code  : %d\n ===================================================================================================================================================================\n S_n|   Ins.   |PF |  Name of the Employee    |BASIC   |HRA    |CONV   |WASHING|HRD_DT|Arrier |Total| PF SALARY|          Deductions           |  Net   |  Signature\n    |    No.   |A/c|  (Father/Husband Name)   |        |       |       |       |      |(Ot_hr)|     |ESI SALARY|-------|------|------|---------| Amount |  ---------\n    |   POST   |No.|T_day =W.day  +E.L. +H.L. |        |INCENTI|       |       |      |O_time |     |          | E.S.I.| P.F. |I_TAX | Total   | Payable|  Date of\n    |   PF RT  |   |       C.L.   +CCL        |        |       |       |       |      |       |     |          |ADVANCE|P_TAX |S_DPT |Deduction|        |  Payment\n    |  UAN NO  |   |                          |        |       |       |       |      |       |     |          |       |      |S_TAX |         |        |\n===================================================================================================================================================================\n" , month , daysInMonth , year , pageIndex , establishmentName , address , estCode  );
+            // return String.format("\n                                                   Register of Salary for the Month of %s %d,%d \n                                                                                                            Page %d\n  Name of the Estt. %s\n  Address     %s\n  Est_Code  : %d\n ===================================================================================================================================================================\n S_n|   Ins.   |PF |  Name of the Employee    |BASIC   |HRA    |CONV   |WASHING|HRD_DT|Arrier |Total| PF SALARY|          Deductions           |  Net   |  Signature\n    |    No.   |A/c|  (Father/Husband Name)   |        |       |       |       |      |(Ot_hr)|     |ESI SALARY|-------|------|------|---------| Amount |  ---------\n    |   POST   |No.|T_day =W.day  +E.L. +H.L. |        |INCENTI|       |       |      |O_time |     |          | E.S.I.| P.F. |I_TAX | Total   | Payable|  Date of\n    |   PF RT  |   |       C.L.   +CCL        |        |       |       |       |      |       |     |          |ADVANCE|P_TAX |S_DPT |Deduction|        |  Payment\n    |  UAN NO  |   |                          |        |       |       |       |      |       |     |          |       |      |S_TAX |         |        |\n===================================================================================================================================================================\n" , month , daysInMonth , year , pageIndex , establishmentName , address , estCode  );
+
+
+            return String.format("\n                                                   Register of Salary for the Month of %s %d,%d\n\n\n  Name of the Estt. %s                                                                             {  }             Page  %d\n  Address    %s\n  Est_Code  : %d\n ===================================================================================================================================================================\n S_n|   Ins.   |PF |  Name of the Employee    |BASIC   |HRA    |CONV   |WASHING|HRD_DT|Arrier |Total| PF SALARY|          Deductions           |  Net   |  Signature\n    |    No.   |A/c|  (Father/Husband Name)   |        |       |       |       |      |(Ot_hr)|     |ESI SALARY|-------|------|------|---------| Amount |  ---------\n    |   POST   |No.|T_day =W.day  +E.L. +H.L. |        |INCENTI|       |       |      |O_time |     |          | E.S.I.| P.F. |I_TAX | Total   | Payable|  Date of\n    |   PF RT  |   |       C.L.   +CCL        |        |       |       |       |      |       |     |          |ADVANCE|P_TAX |S_DPT |Deduction|        |  Payment\n    |  UAN NO  |   |                          |        |       |       |       |      |       |     |          |       |      |S_TAX |         |        |\n ===================================================================================================================================================================\n", month , daysInMonth , year , establishmentName ,  pageIndex  , address , estCode);
         }
 
 
@@ -197,7 +227,7 @@ class Manager {
 
             try {
 
-                fout = new FileOutputStream( regionOptional == null ? FileComponentHandler.generatePath(PATH_MAIN , new String[]{"data" , pfRegNumber + "" , year + "" , month ,"combined_" + pfRegNumber + "_" + month + "_" + year + ".docx"}) : FileComponentHandler.generatePath(PATH_MAIN , new String[]{ "data" , pfRegNumber + "" , year + "" , month , regionOptional ,"conbined_" + pfRegNumber + "_" + regionOptional + "_" + month + "_" + year + ".docx"}));
+                fout = new FileOutputStream( regionOptional == null ? FileComponentHandler.generatePath(PATH_MAIN , new String[]{"data" , pfRegNumber + "" , year + "" , month ,"combined_" + pfRegNumber + "_" + month + "_" + year + ".docx"}) : FileComponentHandler.generatePath(PATH_MAIN , new String[]{ "data" , pfRegNumber + "" , year + "" , month , regionOptional ,"combined_" + pfRegNumber + "_" + regionOptional + "_" + month + "_" + year + ".docx"}));
 
 
                 output = new FileWriter( regionOptional == null ? FileComponentHandler.generatePath(PATH_MAIN , new String[]{"data" , pfRegNumber + "" , year + "" , month ,"out_" + pfRegNumber + "_" + month + "_" + year + ".txt"}) : FileComponentHandler.generatePath(PATH_MAIN , new String[]{ "data" , pfRegNumber + "" , year + "" , month , regionOptional ,"out_" + pfRegNumber + "_" + regionOptional + "_" + month + "_" + year + ".txt"}));
@@ -226,7 +256,7 @@ class Manager {
                     else{
                         consolidatedInnerData = getConsolidatedReportInnerFormat(
                             employeeIndex  - employeeIndexAccurator ,
-                            (long) estab.getInt("esicRegNumber") ,
+                            estab.getLong("esicRegNumber") ,
                             emp.getString("name")  ,
                             (int)emp.getDouble("basic") ,
                             (int)emp.getDouble("hra") ,

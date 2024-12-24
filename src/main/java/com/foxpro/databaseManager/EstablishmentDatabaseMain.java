@@ -6,11 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.logging.Logger;
 
 class EstablishmentDatabaseMain {
 
-    private static Logger logging = Logger.getLogger(EstablishmentDatabaseMain.class.getName());
 
     private static boolean checkForTable(Connection conn , String tableName , long pfRegNumber) throws  SQLException{
         String query = "SELECT COUNT(*) as count FROM ? WHERE pfRegNumber = ?";
