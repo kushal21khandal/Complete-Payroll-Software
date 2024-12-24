@@ -268,7 +268,7 @@ class Manager {
                         pfDeduction = (int)emp.getDouble("pfDeduction");
                         eps_amount = (int)( ( eps_salary * 15) /100 );
 
-                        bufferedWriter.write(emp.getLong("uan")+"#~#"+emp.getString("name").replaceFirst("M(r)?(s)?\s+" , "" ) +"#~#" +(int)emp.getDouble("calc_salary") + "#~#" + (int)emp.getDouble("pf_salary") + "#~#" + eps_salary + "#~#" +eps_salary + "#~#" + pfDeduction + "#~#" +  (pfDeduction - eps_amount) + "#~#" + eps_amount + "#~#" +(int)( emp.getDouble("totalDays") - emp.getDouble("attendance")  )+ "#~#0\n");
+                        bufferedWriter.write(emp.getLong("uan")+"#~#"+emp.getString("name").replaceFirst("M?(r|rs|s)?.?\\s+" , "" ) +"#~#" +(int)emp.getDouble("calc_salary") + "#~#" + (int)emp.getDouble("pf_salary") + "#~#" + eps_salary + "#~#" +eps_salary + "#~#" + pfDeduction + "#~#" +  (pfDeduction - eps_amount) + "#~#" + eps_amount + "#~#" +(int)( emp.getDouble("totalDays") - emp.getDouble("attendance")  )+ "#~#0\n");
 
                         hasNextEmployee = emp.next();
                     }
