@@ -119,6 +119,7 @@ class Employees {
                 input = input.trim();
 
                 if (input.isBlank()) {
+                    System.out.println("NAME SHOULD BE PROPERLY MATCHED WITH THE DATABASE");
                     System.out.print("name : ");
                     input = mainBufferedReader.readLine().trim();
                     // to do : print by name

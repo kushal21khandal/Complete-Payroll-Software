@@ -33,3 +33,28 @@ this is on how to add logs to a .log file in java
 
 
     # DO not forget to close the fileHandler connection
+
+
+// what completed and what not completed
+done :
+    establihsment :
+        add , update :
+                    salaryStructure
+                    update Establishment
+    employees :
+        add ( path pf_csv_file , client_csv_file )
+        ## no logic added for adding incentive in the auto mode
+        ## logic for incentive added in manual mode
+
+    report :
+        .txt file
+
+
+not done :
+    report :
+        .docx file ( proper formatting not set )
+
+
+testing pending :
+    employees :
+        add employees manually

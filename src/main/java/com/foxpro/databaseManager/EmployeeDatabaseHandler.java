@@ -130,7 +130,8 @@ public class EmployeeDatabaseHandler {
         try {
             uan = EmployeeDatabaseMain.printEmployeeDetailsByName(conn, name);
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("INCORRENT NAME");
+            System.out.println(e);
         }
         return uan;
     }
