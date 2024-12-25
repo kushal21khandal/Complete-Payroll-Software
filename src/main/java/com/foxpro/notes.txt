@@ -54,7 +54,3 @@ not done :
     report :
         .docx file ( proper formatting not set )
 
-
-testing pending :
-    employees :
-        add employees manually
