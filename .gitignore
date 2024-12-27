@@ -30,3 +30,5 @@ replay_pid*
 *.txt
 
 src/main/resources/combinedPayslipStructure
+
+*/target/**
