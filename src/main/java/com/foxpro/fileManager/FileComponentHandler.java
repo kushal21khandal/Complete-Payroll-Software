@@ -1,11 +1,10 @@
 package com.foxpro.fileManager;
 
 import java.io.IOException;
-import java.lang.StringBuilder;
 
 public class FileComponentHandler {
 
-    private static final String OS_PATH_DELIMITER = System.getProperty("os.name").contains("win") ? "\\" : "/";
+    public static final String OS_PATH_DELIMITER = System.getProperty("os.name").contains("win") ? "\\" : "/";
 
 
     public static String generatePath(String root, String[] leaves) {

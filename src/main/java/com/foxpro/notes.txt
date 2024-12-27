@@ -54,3 +54,12 @@ not done :
     report :
         .docx file ( proper formatting not set )
 
+
+
+path document.xml in extracted folder
+
+resources/extractedFolder/word/document.xml
+
+
+// GenerateReport.generateReport();
+// .zip extension directly named to .docx , if not worked : save in .zip and renmae to .docx
