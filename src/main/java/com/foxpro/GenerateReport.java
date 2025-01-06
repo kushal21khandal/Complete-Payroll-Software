@@ -339,34 +339,33 @@ class GenerateReport{
             report.generate();
         }
 
-        // initiate employee connection
         ResultSet emp = (ResultSet) EmployeeDatabaseHandler.getAllEmployeeDetails();
-        total_basic = emp.getDouble("basic");
-        total_hra = emp.getDouble("hra");
-        total_conv = emp.getDouble("convence");
-        total_washingAllowance = emp.getDouble("washingAllowance");
-        total_overtime = emp.getDouble("overtime");
-        total_salary = emp.getDouble("totalSalary");
-        pf_salary = emp.getDouble("pf_salary");
-        esic_deduction = emp.getDouble("esicDeduction");
-        pf_deduction = emp.getDouble("pfDeduction");
-        total_deduction = emp.getDouble("totalDeduction");
-        netPayableAmount = emp.getDouble("netPayableAmount");
-        father_husband_name = emp.getString("father_husband_name");
-        esic_salary = emp.getDouble("esic_salary");
-        memberId = emp.getDouble("memberId") + "";
-        attendance = (emp.getDouble("attendance"));
-        calc_basic = emp.getDouble("calc_basic");
-        calc_hra = emp.getDouble("calc_hra");
-        calc_conv = emp.getDouble("calc_convence");
-        calc_washingAllowance = emp.getDouble("calc_washingAllowance");
-        calc_overtime = emp.getDouble("calc_overtime");
-        calc_salary = emp.getDouble("calc_salary");
-        uan = (long) emp.getInt("uan");
-        calc_incentive = emp.getDouble("calc_incentive");
 
 
         while (emp.next()) {
+            total_basic = emp.getDouble("basic");
+            total_hra = emp.getDouble("hra");
+            total_conv = emp.getDouble("convence");
+            total_washingAllowance = emp.getDouble("washingAllowance");
+            total_overtime = emp.getDouble("overtime");
+            total_salary = emp.getDouble("totalSalary");
+            pf_salary = emp.getDouble("pf_salary");
+            esic_deduction = emp.getDouble("esicDeduction");
+            pf_deduction = emp.getDouble("pfDeduction");
+            total_deduction = emp.getDouble("totalDeduction");
+            netPayableAmount = emp.getDouble("netPayableAmount");
+            father_husband_name = emp.getString("father_husband_name");
+            esic_salary = emp.getDouble("esic_salary");
+            memberId = emp.getDouble("memberId") + "";
+            attendance = (emp.getDouble("attendance"));
+            calc_basic = emp.getDouble("calc_basic");
+            calc_hra = emp.getDouble("calc_hra");
+            calc_conv = emp.getDouble("calc_convence");
+            calc_washingAllowance = emp.getDouble("calc_washingAllowance");
+            calc_overtime = emp.getDouble("calc_overtime");
+            calc_salary = emp.getDouble("calc_salary");
+            uan = (long) emp.getInt("uan");
+            calc_incentive = emp.getDouble("calc_incentive");
 
             //sacttering emp.getFunctions into the variables;
             for (Report report : reports) {
