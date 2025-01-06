@@ -414,7 +414,9 @@ class Cmd {
                     try {
                             for (String m : months.keySet()){
                                 if (m.equals(month)){
-                                    Manager.GenerateReport.generateReport(pfRegNumber , year , month , region_optional.isBlank() ? null : region_optional, months.get(m));
+                                    GenerateReport generator = new GenerateReport(pfRegNumber, year, month, region_optional.isBlank() ? null : region_optional , months.get(m));
+                                    generator.generateReport();
+                                    Manager.closeEmployeeConnection();
                                     break;
                                 }
                                 else{

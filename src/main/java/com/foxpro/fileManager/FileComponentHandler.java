@@ -3,6 +3,7 @@ package com.foxpro.fileManager;
 import java.io.IOException;
 
 public class FileComponentHandler {
+    /* utility class : can be created whole static , even does not require to pass call to FileComponenetMain  */
 
     public static final String OS_PATH_DELIMITER = System.getProperty("os.name").contains("win") ? "\\" : "/";
 

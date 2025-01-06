@@ -234,6 +234,9 @@ class Employees {
 
         } else {
 
+
+            /* add incentive  */
+
             try {
                 fileReader = new FileReader(path_client_csv);
                 BufferedReader fileBufferedReader = new BufferedReader(fileReader);

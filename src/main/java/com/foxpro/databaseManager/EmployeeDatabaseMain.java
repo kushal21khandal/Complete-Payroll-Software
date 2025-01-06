@@ -50,29 +50,6 @@ class EmployeeDatabaseMain {
         for (int i = 0; i < arr.length; i++){
             preparedStatement.setDouble(i + 1 , arr[i]);
         }
-
-        // preparedStatement.setDouble(1 , arr[0]);
-        // preparedStatement.setDouble(2 , arr[1]);
-        // preparedStatement.setDouble(3 , arr[2]);
-        // preparedStatement.setDouble(4 , arr[3]);
-        // preparedStatement.setDouble(5 , arr[4]);
-        // preparedStatement.setDouble(6 , arr[5]);
-        // preparedStatement.setDouble(7 , arr[6]);
-        // preparedStatement.setDouble(8 , arr[7]);
-        // preparedStatement.setDouble(9 , arr[8]);
-        // preparedStatement.setDouble(10 , arr[9]);
-        // preparedStatement.setDouble(11 , arr[10]);
-        // preparedStatement.setDouble(12 , arr[11]);
-        // preparedStatement.setDouble(13 , arr[12]);
-        // preparedStatement.setDouble(14 , arr[13]);
-        // preparedStatement.setDouble(15 , arr[14]);
-        // preparedStatement.setDouble(16 , arr[15]);
-        // preparedStatement.setDouble(17, arr[16]);
-        // preparedStatement.setDouble(18, arr[17]);
-        // preparedStatement.setDouble(19, arr[18]);
-        // preparedStatement.setDouble(20 , arr[19]);
-        // preparedStatement.setDouble(21 , arr[20]);
-        // preparedStatement.setDouble(22, arr[21]);
         preparedStatement.setLong(arr.length + 1 , uan);
         preparedStatement.executeUpdate();
 
@@ -99,21 +76,6 @@ class EmployeeDatabaseMain {
         while(++i < lineArr.length){
             preparedStatement.setString(i , lineArr[i -1 ]);
         }
-        // preparedStatement.setString(2 , lineArr[1]);
-        // preparedStatement.setString(3 , lineArr[2]);
-        // preparedStatement.setString(4 , lineArr[3]);
-        // preparedStatement.setString(5 , lineArr[4]);
-        // preparedStatement.setString(6 , lineArr[5]);
-        // preparedStatement.setString(7 , lineArr[6]);
-        // preparedStatement.setString(8 , lineArr[7]);
-        // preparedStatement.setString(9 , lineArr[8]);
-        // preparedStatement.setString(10 , lineArr[9]);
-        // preparedStatement.setString(11 , lineArr[10]);
-        // preparedStatement.setString(12 , lineArr[11]);
-        // preparedStatement.setString(13 , lineArr[12]);
-        // preparedStatement.setString(14 , lineArr[13]);
-        // preparedStatement.setString(15 , lineArr[14]);
-        // preparedStatement.setString(16 , lineArr[15]);
         preparedStatement.executeUpdate();
 
     }
