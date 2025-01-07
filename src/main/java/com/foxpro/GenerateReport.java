@@ -61,6 +61,10 @@ class GenerateReport{
     String month;
     int daysInMonth;
     GenerateReport(long pfReg , int year , String month , String region_op , int daysInMonth){
+        // initializing pfReg , month , daysInMonth for to be used inside naming of pf.xlsx ( sheet name )
+        this.pfReg = pfReg;
+        this.month = month;
+        this.daysInMonth = daysInMonth;
 
 
         // initialise establishment
@@ -118,8 +122,8 @@ class GenerateReport{
         public void close() {
             try{
                 if (fileWriter != null) {
-                    fileWriter.close();
                     bufferedWriter.close();
+                    fileWriter.close();
                 }
 
             }
@@ -170,7 +174,7 @@ class GenerateReport{
 
             int i  = 0;
             for ( String s : new String[]{ "IP NUMBER" , "IP NAME" , "No. of days for which wages paid/payable during the month" , "TOTAL MONTHLY WAGES" , "Reason Code for Zero Working Days" , "Last Working Day"}){
-                header.createCell(i++);
+                headerCell = header.createCell(i++);
                 headerCell.setCellValue(s);
                 headerCell.setCellStyle(headerStyle);
             }
@@ -243,7 +247,7 @@ class GenerateReport{
         Cell cell ;
         CellStyle style ;
 
-        int serial_no = 0;
+        int serial_no = 1;
 
         Object[] arr;
 
@@ -276,7 +280,7 @@ class GenerateReport{
 
                 int i = 0;
                 for (String s : new String[]{"S_No" , "ESIC REG NO" , "UAN NO" , "PF ACC NO" , "EMPLOYEE NAME" ,"FATHER'S NAME" , "ATTENDANCE" , "DAYS WORKED" ,   "BASIC" , "CALC_BASIC" , "HRA" , "CALC_HRA" , "INCENTIVE" , "CONV" , "CALC_CONV" , "WASHING_ALLOW." , "CALC_WASHING_ALLOW." , "HARD DUTY" , "CALC_HARD_DUTY" , "TOTAL SALARY" , "CALC_SALARY" , "PF_SALARY" , "ESIC_SALARY" , "ESIC_ADV" , "PF_ADV" , "TOTAL DEDUCTION" , "NET PAYABLE AMOUNT"}) {
-                    header.createCell(i++);
+                    headerCell = header.createCell(i++);
                     headerCell.setCellValue(s);
                     headerCell.setCellStyle(headerStyle);
                 }
@@ -294,7 +298,7 @@ class GenerateReport{
             row = sheet.createRow(pfExcelRowIndex++);
 
             arr = new Object[]{
-                est.esicRegNumber , uan , (Long.parseLong(memberId))% 100000000 , name , father_husband_name , totalDays , attendance ,total_basic , calc_basic , total_hra , calc_hra , calc_incentive , total_conv , calc_conv , total_washingAllowance , calc_washingAllowance , total_overtime , calc_overtime , total_salary , calc_salary , pf_salary , esic_salary , esic_deduction , pf_deduction , total_deduction , netPayableAmount
+                est.esicRegNumber , uan , (Long.parseLong(memberId.substring(5)))% 100000000 , name , father_husband_name , totalDays , attendance ,total_basic , calc_basic , total_hra , calc_hra , calc_incentive , total_conv , calc_conv , total_washingAllowance , calc_washingAllowance , total_overtime , calc_overtime , total_salary , calc_salary , pf_salary , esic_salary , esic_deduction , pf_deduction , total_deduction , netPayableAmount
             };
 
             cell = row.createCell(0);
@@ -354,10 +358,11 @@ class GenerateReport{
             pf_deduction = emp.getDouble("pfDeduction");
             total_deduction = emp.getDouble("totalDeduction");
             netPayableAmount = emp.getDouble("netPayableAmount");
+            name = emp.getString("name");
             father_husband_name = emp.getString("father_husband_name");
             esic_salary = emp.getDouble("esic_salary");
-            memberId = emp.getDouble("memberId") + "";
-            attendance = (emp.getDouble("attendance"));
+            memberId = emp.getString("memberId");
+            attendance = (double)(emp.getInt("attendance"));
             calc_basic = emp.getDouble("calc_basic");
             calc_hra = emp.getDouble("calc_hra");
             calc_conv = emp.getDouble("calc_convence");

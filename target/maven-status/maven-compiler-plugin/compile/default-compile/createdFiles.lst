@@ -7,11 +7,15 @@ com/foxpro/EstablishmentFactory.class
 com/foxpro/Cmd.class
 com/foxpro/databaseManager/EstablishmentDatabaseMain.class
 com/foxpro/Logs.class
+com/foxpro/GenerateReport$PF_Report.class
 com/foxpro/Config.class
 com/foxpro/databaseManager/EmployeeDatabaseHandler.class
 com/foxpro/Manager.class
 com/foxpro/Establishment.class
-com/foxpro/Manager$GenerateReport.class
+com/foxpro/GenerateReport$FinalReport.class
+com/foxpro/GenerateReport$Report.class
+com/foxpro/GenerateReport.class
 com/foxpro/App.class
 com/foxpro/SalaryStructure.class
+com/foxpro/GenerateReport$ESIC_Report.class
 com/foxpro/SalaryStructureFactory.class
