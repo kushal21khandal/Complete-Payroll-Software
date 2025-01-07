@@ -279,7 +279,7 @@ class GenerateReport{
                 Cell headerCell = null;
 
                 int i = 0;
-                for (String s : new String[]{"S_No" , "ESIC REG NO" , "UAN NO" , "PF ACC NO" , "EMPLOYEE NAME" ,"FATHER'S NAME" , "ATTENDANCE" , "DAYS WORKED" ,   "BASIC" , "CALC_BASIC" , "HRA" , "CALC_HRA" , "INCENTIVE" , "CONV" , "CALC_CONV" , "WASHING_ALLOW." , "CALC_WASHING_ALLOW." , "HARD DUTY" , "CALC_HARD_DUTY" , "TOTAL SALARY" , "CALC_SALARY" , "PF_SALARY" , "ESIC_SALARY" , "ESIC_ADV" , "PF_ADV" , "TOTAL DEDUCTION" , "NET PAYABLE AMOUNT"}) {
+                for (String s : new String[]{"S_No" , "ESIC REG NO" , "UAN NO" , "PF ACC NO" , "EMPLOYEE NAME" ,"FATHER'S NAME" , "ATTENDANCE" ,   "BASIC" , "CALC_BASIC" , "HRA" , "CALC_HRA" , "INCENTIVE" , "CONV" , "CALC_CONV" , "WASHING_ALLOW." , "CALC_WASHING_ALLOW." , "HARD DUTY" , "CALC_HARD_DUTY" , "TOTAL SALARY" , "CALC_SALARY" , "PF_SALARY" , "ESIC_SALARY" , "ESIC_ADV" , "PF_ADV" , "TOTAL DEDUCTION" , "NET PAYABLE AMOUNT"}) {
                     headerCell = header.createCell(i++);
                     headerCell.setCellValue(s);
                     headerCell.setCellStyle(headerStyle);
@@ -298,7 +298,7 @@ class GenerateReport{
             row = sheet.createRow(pfExcelRowIndex++);
 
             arr = new Object[]{
-                est.esicRegNumber , uan , (Long.parseLong(memberId.substring(5)))% 100000000 , name , father_husband_name , totalDays , attendance ,total_basic , calc_basic , total_hra , calc_hra , calc_incentive , total_conv , calc_conv , total_washingAllowance , calc_washingAllowance , total_overtime , calc_overtime , total_salary , calc_salary , pf_salary , esic_salary , esic_deduction , pf_deduction , total_deduction , netPayableAmount
+                est.esicRegNumber , uan , (Long.parseLong(memberId.substring(5)))% 100000000 , name , father_husband_name , attendance ,total_basic , calc_basic , total_hra , calc_hra , calc_incentive , total_conv , calc_conv , total_washingAllowance , calc_washingAllowance , total_overtime , calc_overtime , total_salary , calc_salary , pf_salary , esic_salary , esic_deduction , pf_deduction , total_deduction , netPayableAmount
             };
 
             cell = row.createCell(0);
@@ -307,7 +307,7 @@ class GenerateReport{
 
 
 
-            for ( int i = 1; i< 27; i++){
+            for ( int i = 1; i< arr.length; i++){
 
                 cell = row.createCell(i);
                 cell.setCellValue(arr[i - 1] + "");
@@ -369,7 +369,7 @@ class GenerateReport{
             calc_washingAllowance = emp.getDouble("calc_washingAllowance");
             calc_overtime = emp.getDouble("calc_overtime");
             calc_salary = emp.getDouble("calc_salary");
-            uan = (long) emp.getInt("uan");
+            uan =  emp.getLong("uan");
             calc_incentive = emp.getDouble("calc_incentive");
 
             //sacttering emp.getFunctions into the variables;
