@@ -67,4 +67,25 @@ resources/extractedFolder/word/document.xml
 
 NOW HAVE TO CHANGE EVERYTHING FOR EXCEL
 
+TODO
+total_days ka dekhna h ek baar , kya lafda h , important h bhi ki nhi
+what i think  totalDays static hona chahiye because this is same for all the employees , for eg : maan lete h iss week me 4 sunday h aur mahina 30 ka h  toh total_days 30-4 = 26 ka ho jayega toh iss hisaab se sabke liye hi 26 ka ho jaana chahiye
+and if this sets to true then have to change while in the adding of the employees in Employees class;
 
+
+
+    // raw copy area
+
+            // cell = row.createCell(0);
+            // cell.setCellValue(serial_no++);
+            // cell.setCellStyle(style);
+
+
+
+            // for ( int i = 1; i< arr.length; i++){
+
+            //     cell = row.createCell(i);
+            //     cell.setCellValue(arr[i - 1] + "");
+            //     cell.setCellStyle(style);
+
+            // }

@@ -121,6 +121,7 @@ class GenerateReport{
         @Override
         public void close() {
             try{
+
                 if (fileWriter != null) {
                     bufferedWriter.close();
                     fileWriter.close();
@@ -239,6 +240,9 @@ class GenerateReport{
 
 
     class PF_Report implements Report{
+        /*
+         * one single change has to be addressed to all the functions all functions interconnected
+         */
         FileOutputStream xlsxFileOutputStream = null;
         XSSFWorkbook workbook = null;
         int pfExcelRowIndex = 0;
@@ -293,26 +297,20 @@ class GenerateReport{
 
         }
 
+
         @Override
         public void add() {
             row = sheet.createRow(pfExcelRowIndex++);
 
             arr = new Object[]{
-                est.esicRegNumber , uan , (Long.parseLong(memberId.substring(5)))% 100000000 , name , father_husband_name , attendance ,total_basic , calc_basic , total_hra , calc_hra , calc_incentive , total_conv , calc_conv , total_washingAllowance , calc_washingAllowance , total_overtime , calc_overtime , total_salary , calc_salary , pf_salary , esic_salary , esic_deduction , pf_deduction , total_deduction , netPayableAmount
+                serial_no++ , est.esicRegNumber , uan , (Long.parseLong(memberId.substring(5)))% 100000000 , name , father_husband_name , attendance ,total_basic , calc_basic , total_hra , calc_hra , calc_incentive , total_conv , calc_conv , total_washingAllowance , calc_washingAllowance , total_overtime , calc_overtime , total_salary , calc_salary , pf_salary , esic_salary , esic_deduction , pf_deduction , total_deduction , netPayableAmount
             };
 
-            cell = row.createCell(0);
-            cell.setCellValue(serial_no++);
-            cell.setCellStyle(style);
 
-
-
-            for ( int i = 1; i< arr.length; i++){
-
+            for ( int i = 0; i < arr.length; i++){
                 cell = row.createCell(i);
-                cell.setCellValue(arr[i - 1] + "");
+                cell.setCellValue(arr[i] + "");
                 cell.setCellStyle(style);
-
             }
 
 
@@ -322,6 +320,11 @@ class GenerateReport{
         @Override
         public void close() {
             try{
+
+
+                addTotal();
+
+
                 workbook.write(xlsxFileOutputStream);
                 workbook.close();
                 xlsxFileOutputStream.close();
@@ -329,6 +332,69 @@ class GenerateReport{
             catch(IOException ioException){
                 ioException.printStackTrace();
             }
+        }
+
+
+        public void addTotal() {
+            try {
+                ResultSet emp_sum = (ResultSet) EmployeeDatabaseHandler.getSumTotal();
+
+                int[] arr_sum = new int[]{
+                    (int) emp_sum.getDouble("sum_attendance"),
+                    (int) emp_sum.getDouble("sum_basic"),
+                    (int) emp_sum.getDouble("sum_calc_basic"),
+                    (int) emp_sum.getDouble("sum_hra"),
+                    (int) emp_sum.getDouble("sum_calc_hra"),
+                    (int) emp_sum.getDouble("sum_calc_incentive"),
+                    (int) emp_sum.getDouble("sum_convence"),
+                    (int) emp_sum.getDouble("sum_calc_convence"),
+                    (int) emp_sum.getDouble("sum_washingAllowance"),
+                    (int) emp_sum.getDouble("sum_calc_washingAllowance"),
+                    (int) emp_sum.getDouble("sum_overtime"),
+                    (int) emp_sum.getDouble("sum_calc_overtime"),
+                    (int) emp_sum.getDouble("sum_totalSalary"),
+                    (int) emp_sum.getDouble("sum_calc_salary"),
+                    // (int) emp_sum.getDouble("sum_totalDays"),
+                    (int) emp_sum.getDouble("sum_pf_salary"),
+                    (int) emp_sum.getDouble("sum_esic_salary"),
+                    (int) emp_sum.getDouble("sum_esicDeduction"),
+                    (int) emp_sum.getDouble("sum_pfDeduction"),
+                    (int) emp_sum.getDouble("sum_totalDeduction"),
+                    (int) emp_sum.getDouble("sum_netPayableAmount")
+                };
+
+                // adding to excel
+                row = sheet.createRow(pfExcelRowIndex++);
+                row = sheet.createRow(pfExcelRowIndex++);
+                row = sheet.createRow(pfExcelRowIndex++);
+
+                cell = row.createCell(0);
+                cell.setCellValue("NET TOTAL");
+                cell.setCellStyle(style);
+
+
+                for ( int i = 1; i < arr.length; i++){
+
+                    if ( i >= 6){
+                        cell = row.createCell(i);
+                        cell.setCellValue(arr_sum[i-6]);
+                        cell.setCellStyle(style);
+                    }
+                    else {
+                        cell = row.createCell(i);
+                    }
+
+                }
+
+
+
+
+
+            }
+            catch(SQLException exception){
+                exception.printStackTrace();
+            }
+
         }
 
     }
