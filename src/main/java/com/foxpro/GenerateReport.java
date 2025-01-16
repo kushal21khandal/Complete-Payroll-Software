@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFFont;
@@ -90,6 +91,8 @@ class GenerateReport{
 
     class FinalReport implements Report{
 
+        int ncp_days;
+
         FileWriter fileWriter = null;
         BufferedWriter bufferedWriter = null;
 
@@ -111,7 +114,10 @@ class GenerateReport{
 
                 pf_deduction = (int) pf_deduction;
                 eps_amount = (int) ((eps_salary * 15) / 100);
-                bufferedWriter.write(uan + "#~#" + name.replaceFirst("M?(r|rs|s)?.?\\s+", "") + "#~#" + (int) calc_salary + "#~#" + (int) pf_salary + "#~#" + eps_salary + "#~#" + eps_salary + "#~#" + pf_deduction + "#~#" + (pf_deduction - eps_amount) + "#~#" + eps_amount + "#~#" + (int) (totalDays - attendance) + "#~#0\n");
+
+                ncp_days = (int)(totalDays - attendance);
+                bufferedWriter.write(uan + "#~#" + name.replaceFirst("M?(r|rs|s)?.?\\s+", "") + "#~#" + (int) calc_salary + "#~#" + (int) pf_salary + "#~#" + (int)eps_salary + "#~#" + (int)eps_salary + "#~#" + (int)pf_deduction + "#~#" + (int)(pf_deduction - eps_amount) + "#~#" + (int)eps_amount + "#~#" + ( ncp_days > 0 ? ncp_days : -1 * ncp_days ) + "#~#0\n");
+
             }
             catch(IOException ioException){
                 ioException.printStackTrace();
@@ -167,7 +173,7 @@ class GenerateReport{
 
             XSSFFont font = ((XSSFWorkbook) workbook).createFont();
             font.setFontName("Arial");
-            font.setFontHeightInPoints((short) 16);
+            font.setFontHeightInPoints((short)6);
             font.setBold(true);
             headerStyle.setFont(font);
             Cell headerCell = null;
@@ -254,6 +260,7 @@ class GenerateReport{
         int serial_no = 1;
 
         Object[] arr;
+        XSSFFont font ;
 
 
 
@@ -266,24 +273,44 @@ class GenerateReport{
 
                 sheet = workbook.createSheet(String.format("%s %s %d %s" , pfReg+"" , month , daysInMonth , est.companyName  ));
                 for ( int i = 0; i < 27; i++){
-                    sheet.setColumnWidth(i, 5000);
+                    if ( i == 0){
+                        sheet.setColumnWidth(i, 550);
+                    }
+                    else if ( i == 1){
+                        sheet.setColumnWidth(i, 1400);
+                    }
+                    else if ( i == 2){
+                        sheet.setColumnWidth(i, 1400);
+                    }
+                    else if ( i == 4){
+                        sheet.setColumnWidth(i, 2400);
+                    }
+                    else if ( i == 5){
+                        sheet.setColumnWidth(i, 1900);
+                    }
+                    else{
+                        sheet.setColumnWidth(i, 900);
+                    }
+
                 }
+
 
                 Row header = sheet.createRow(pfExcelRowIndex++);
 
                 CellStyle headerStyle = workbook.createCellStyle();
-                headerStyle.setFillForegroundColor(IndexedColors.LIGHT_BLUE.getIndex());
-                headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+                // headerStyle.setFillForegroundColor(IndexedColors.LIGHT_BLUE.getIndex());
+                // headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
-                XSSFFont font = ((XSSFWorkbook) workbook).createFont();
+                font = ((XSSFWorkbook) workbook).createFont();
                 font.setFontName("Arial");
-                font.setFontHeightInPoints((short) 16);
+                font.setFontHeightInPoints((short) 5.5);
                 font.setBold(true);
                 headerStyle.setFont(font);
+                headerStyle.setAlignment(HorizontalAlignment.LEFT);
                 Cell headerCell = null;
 
                 int i = 0;
-                for (String s : new String[]{"S_No" , "ESIC REG NO" , "UAN NO" , "PF ACC NO" , "EMPLOYEE NAME" ,"FATHER'S NAME" , "ATTENDANCE" ,   "BASIC" , "CALC_BASIC" , "HRA" , "CALC_HRA" , "INCENTIVE" , "CONV" , "CALC_CONV" , "WASHING_ALLOW." , "CALC_WASHING_ALLOW." , "HARD DUTY" , "CALC_HARD_DUTY" , "TOTAL SALARY" , "CALC_SALARY" , "PF_SALARY" , "ESIC_SALARY" , "ESIC_ADV" , "PF_ADV" , "TOTAL DEDUCTION" , "NET PAYABLE AMOUNT"}) {
+                for (String s : new String[]{"S_No" , "ESIC REG" , "UAN" , "PF ACC" , "EMP. NAME" ,"FATH./HUS. NAME" , "ATT." ,   "BASIC" , "C_BASIC" , "HRA" , "C_HRA" , "INC" , "CONV" , "C_CONV" , "WA_ALL" , "C_WA_ALL." , "H_DTY" , "C_H_DTY" , "T_SAL" , "C_SAL" , "PF_SAL" , "ESIC_SAL" , "ESIC_ADV" , "PF_ADV" , "T_DDN" , "N.P.AMT"}) {
                     headerCell = header.createCell(i++);
                     headerCell.setCellValue(s);
                     headerCell.setCellStyle(headerStyle);
@@ -291,6 +318,13 @@ class GenerateReport{
 
                 style = workbook.createCellStyle();
                 style.setWrapText(true);
+
+
+
+                // set CellStyle "style" ( which is used in the add function below ) , same font added because to have uniformity across all the text
+                font.setBold(false);
+                style.setFont(font);
+                style.setAlignment(HorizontalAlignment.LEFT);
             } catch (FileNotFoundException fileNotFoundException) {
                 fileNotFoundException.printStackTrace();
             }
@@ -364,18 +398,24 @@ class GenerateReport{
                 };
 
                 // adding to excel
+                // row = sheet.createRow(pfExcelRowIndex++);
                 row = sheet.createRow(pfExcelRowIndex++);
                 row = sheet.createRow(pfExcelRowIndex++);
-                row = sheet.createRow(pfExcelRowIndex++);
 
-                cell = row.createCell(0);
-                cell.setCellValue("NET TOTAL");
-                cell.setCellStyle(style);
+                // cell = row.createCell(0);
+                // cell.setCellValue("NET TOTAL");
+                // cell.setCellStyle(style);
 
 
-                for ( int i = 1; i < arr.length; i++){
+                for ( int i = 0; i < arr.length; i++){
 
-                    if ( i >= 6){
+                    if ( i == 1){
+                        cell = row.createCell(i);
+                        cell.setCellValue("NET TOTAL");
+                        cell.setCellStyle(style);
+
+                    }
+                    else if ( i >= 6){
                         cell = row.createCell(i);
                         cell.setCellValue(arr_sum[i-6]);
                         cell.setCellStyle(style);
