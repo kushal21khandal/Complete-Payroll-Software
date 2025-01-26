@@ -1,5 +1,6 @@
 package com.foxpro.fileManager;
 
+import java.io.File;
 import java.io.IOException;
 
 public class FileComponentHandler {
@@ -34,5 +35,10 @@ public class FileComponentHandler {
     public static boolean isExists(String path){
         return FileComponentMain.isExists(path);
     }
+
+    public static void copy(String sourceDir , String currentMonthName , String destinationDir , String nextMonthName){
+        FileComponentMain.copy(new File( sourceDir + OS_PATH_DELIMITER + currentMonthName +".db" ), new File( destinationDir + OS_PATH_DELIMITER + nextMonthName + ".db" ));
+    }
+
 
 }

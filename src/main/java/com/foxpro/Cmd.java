@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Iterator;
+
 
 class Cmd {
 
@@ -411,24 +413,54 @@ class Cmd {
                     month = bufferedReader.readLine().trim();
                     print("region ( optional , if no particular region -> leave empty : press [ENTER])");
                     region_optional = bufferedReader.readLine().trim();
+                    GenerateReport generator;
+                    // adding it
+                    Iterator<String> month_iterator =  months.keySet().iterator();
+                    String iter_month;
                     try {
-                            for (String m : months.keySet()){
-                                if (m.equals(month)){
-                                    GenerateReport generator = new GenerateReport(pfRegNumber, year, month, region_optional.isBlank() ? null : region_optional , months.get(m));
-                                    generator.generateReport();
-                                    Manager.closeEmployeeConnection();
-                                    break;
+                        while (month_iterator.hasNext()) {
+                            iter_month = month_iterator.next();
+                            if (iter_month.equals(month)) {
+                                generator = new GenerateReport(pfRegNumber, year, month, region_optional.isBlank() ? null : region_optional, months.get(month));
+                                if ( month_iterator.hasNext() == true){
+                                    generator.next_month = month_iterator.next();
                                 }
                                 else{
-                                    if (m.equals("DEC")){
-                                        System.out.println("month not in the correct format , use months from the below list ( CAPITAL LETTERS) ");
-                                        System.out.println(months.keySet());
-                                    }
+                                    generator.next_month = "JAN";
+                                }
+                                generator.generateReport();
+                                Manager.closeEmployeeConnection();
+                                break;
+                            }
+                            else{
+                                if ( iter_month.equals("DEC")){
+                                    System.out.println("month not in the correct format , use months from the below list in CAPITAL LETTERS");
+                                    System.out.println(months.keySet());
                                 }
                             }
+                        }
                     } catch (SQLException exception) {
                         exception.printStackTrace();
                     }
+                    // try {
+                    //         for (String m : months.keySet()){
+
+                    //             if (m.equals(month)){
+                    //                 generator = new GenerateReport(pfRegNumber, year, month, region_optional.isBlank() ? null : region_optional , months.get(m) );
+                    //                 generator.generateReport();
+                    //                 Manager.closeEmployeeConnection();
+                    //                 break;
+                    //              }
+                    //             else{
+                    //                 if (m.equals("DEC")){
+                    //                     System.out.println("month not in the correct format , use months from the below list ( CAPITAL LETTERS) ");
+                    //                     System.out.println(months.keySet());
+                    //                 }
+                    //             }
+                    //         }
+                    // } catch (SQLException exception) {
+                    //     exception.printStackTrace();
+                    // }
 
 
                 } else if (userInput.equalsIgnoreCase("exit") || userInput.equalsIgnoreCase("quit")) {

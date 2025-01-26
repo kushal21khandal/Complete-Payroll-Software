@@ -61,7 +61,14 @@ class GenerateReport{
     long pfReg;
     String month;
     int daysInMonth;
-    GenerateReport(long pfReg , int year , String month , String region_op , int daysInMonth){
+
+
+    String next_month;
+
+
+
+
+    GenerateReport(long pfReg , int year , String month , String region_op , int daysInMonth ){
         // initializing pfReg , month , daysInMonth for to be used inside naming of pf.xlsx ( sheet name )
         this.pfReg = pfReg;
         this.month = month;
@@ -76,6 +83,38 @@ class GenerateReport{
         // generate enpDir from the constructor or using generateReport function
         empDir = FileComponentHandler.generatePath(Config.getPathMain()  , new String[]{"data" , pfReg + "" , year + "" , region_op == null ? month : month + FileComponentHandler.OS_PATH_DELIMITER + region_op});
         reportName = String.format("%s_%d_%s" , pfReg+"" , year , region_op == null ? month : region_op + "_" + month);
+
+
+
+
+
+
+
+
+        // for creating next month directory and copying the .db file into it
+        if (region_op == null) {
+
+            FileComponentHandler.createDir(Config.getPathMain(), new String[]{
+                "data", pfReg + "", year + "", next_month
+            });
+
+            /*
+             * copy data from empDir to the next_month dir without calculations
+             */
+        } else {
+            FileComponentHandler.createDir(Config.getPathMain(), new String[]{
+                "data", pfReg + "", year + "", next_month, region_op
+            });
+
+        }
+
+        /* database copied and changes made and connection closed at the same time */
+        Manager.copyDbAndClearCalculatedData(empDir  , month , empDir.replace(month , next_month) , next_month);
+
+
+
+
+
 
 
 

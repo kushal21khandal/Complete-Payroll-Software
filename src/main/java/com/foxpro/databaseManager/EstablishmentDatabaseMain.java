@@ -32,7 +32,7 @@ class EstablishmentDatabaseMain {
     }
 
     static void insertEstablishment(Connection conn, long pfRegNumber, long esicRegNumber, long phoneNumber, String companyName, String ownerName, String address, String dateOfPfRegistration, String dateOfEsicRegistration) throws SQLException {
-        String query = "INSERT longO establishments VALUES ( ? , ? , ? , ? , ? , ? , ? , ?)";
+        String query = "INSERT INTO establishments VALUES ( ? , ? , ? , ? , ? , ? , ? , ?)";
 
         PreparedStatement preparedStatement = conn.prepareStatement(query);
         preparedStatement.setLong(1, pfRegNumber);

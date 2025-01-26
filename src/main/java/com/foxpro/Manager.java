@@ -80,6 +80,8 @@ class Manager {
 
     }
 
+
+
     public static void initiateEmployeesConnection(long pfRegNumber, int year, String month, String region_optional) {
 
         if (region_optional != null) {
@@ -115,6 +117,22 @@ class Manager {
         } else {
             EmployeeDatabaseHandler.executeFillMonthTable(FileComponentHandler.generatePath(PATH_MAIN, new String[]{"data", pfRegNumber + "", year + "", month, month + ".db"}), pathToPfCSVFile);
         }
+    }
+
+
+    public static void copyDbAndClearCalculatedData(String sourceDir , String currentMonthName ,String destinationDir , String nextMonthName){
+        // database copied
+        FileComponentHandler.copy(sourceDir, currentMonthName, destinationDir, nextMonthName);
+
+        // next_month_database modifications
+        /*
+         * connection established and closed here only
+         */
+        EmployeeDatabaseHandler.initiateConnection(destinationDir + FileComponentHandler.OS_PATH_DELIMITER + nextMonthName + ".db");
+        EmployeeDatabaseHandler.updateNextMonthDatabase();
+        EmployeeDatabaseHandler.closeConnection();
+
+
     }
 
 }

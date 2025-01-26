@@ -93,7 +93,7 @@ and if this sets to true then have to change while in the adding of the employee
 
 
 
-// TODO:
+// TODO: DONE
 font size sabke liye same karna padega aur thoda width ka dekhna padega dono hi match nhi ho rahe
 font globalize karna padega
 
@@ -101,5 +101,10 @@ font globalize karna padega
 // TODO
 // report generate karne se pehle same folder structure agle mahine ke liye bhi banana padega aur database usme save karana padega aur fir usi database me naye employees jud jayenge , toh Employees ke constructor me jaake tujhe generate new folder / file me ek condition lagaani padegi ki vo check kare agar pehle se exist karta h uss location pe koi database then no need to create a new database
 and change database name to next_month.db
+----
+    |
+    -- same folder as of prev month craeted for next month
+    -- database copied
+    --
 
 

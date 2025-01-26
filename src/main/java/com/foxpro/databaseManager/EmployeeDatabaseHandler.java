@@ -164,4 +164,13 @@ public class EmployeeDatabaseHandler {
         }
     }
 
+    public static void updateNextMonthDatabase(){
+        try{
+            EmployeeDatabaseMain.updateNextMonthDatabase(conn);
+        }
+        catch(SQLException exception){
+            exception.printStackTrace();
+        }
+    }
+
 }

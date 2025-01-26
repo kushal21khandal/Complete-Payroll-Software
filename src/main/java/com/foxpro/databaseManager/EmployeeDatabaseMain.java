@@ -80,4 +80,11 @@ class EmployeeDatabaseMain {
 
     }
 
+
+    static void updateNextMonthDatabase(Connection conn) throws SQLException{
+        String query = "UPDATE data SET totalSalary=0,attendance=0,basic=0,hra=0,convence=0,overtime=0,washingAllowance=0,calc_basic=0,calc_hra=0,calc_convence=0,calc_overtime=0,calc_washingAllowance=0,calc_incentive=0,pf_salary=0,pfDeduction=0,esic_salary=0,esicDeduction=0,totalDeduction=0,calc_salary=0,netPayableAmount=0,totalDays=0,pfPaidByEmployee=0,pfPaidByEmployer=0";
+        PreparedStatement preparedStatement = conn.prepareStatement(query);
+        preparedStatement.executeUpdate();
+    }
+
 }
