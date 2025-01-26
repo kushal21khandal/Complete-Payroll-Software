@@ -15,12 +15,16 @@ class FileComponentMain {
      */
     static void touch(String path) throws IOException {
         File file = new File(path);
-        file.createNewFile();
+        if ( !file.exists()){
+            file.createNewFile();
+        }
     }
 
     static void mkdir(String path) {
         File file = new File(path);
-        file.mkdirs();
+        if (!file.exists()) {
+            file.mkdirs();
+        }
     }
 
     static boolean isExists(String path) {

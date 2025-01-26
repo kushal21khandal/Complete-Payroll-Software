@@ -103,8 +103,9 @@ font globalize karna padega
 and change database name to next_month.db
 ----
     |
-    -- same folder as of prev month craeted for next month
-    -- database copied
-    --
+    -- same folder as of prev month craeted for next month DONE
+    -- database copied DONE
+    -- database modifications DONE
+    -- TODO have to make changes into Employees class for not making the folder structure and database if already exists and also not to create the table as the table if already exists
 
 
