@@ -98,7 +98,7 @@ font size sabke liye same karna padega aur thoda width ka dekhna padega dono hi 
 font globalize karna padega
 
 
-// TODO
+// TODO DONE
 // report generate karne se pehle same folder structure agle mahine ke liye bhi banana padega aur database usme save karana padega aur fir usi database me naye employees jud jayenge , toh Employees ke constructor me jaake tujhe generate new folder / file me ek condition lagaani padegi ki vo check kare agar pehle se exist karta h uss location pe koi database then no need to create a new database
 and change database name to next_month.db
 ----
@@ -106,6 +106,6 @@ and change database name to next_month.db
     -- same folder as of prev month craeted for next month DONE
     -- database copied DONE
     -- database modifications DONE
-    -- TODO have to make changes into Employees class for not making the folder structure and database if already exists and also not to create the table as the table if already exists
+    -- TODO have to make changes into Employees class for not making the folder structure and database if already exists and also not to create the table as the table if already exists DONE
 
 

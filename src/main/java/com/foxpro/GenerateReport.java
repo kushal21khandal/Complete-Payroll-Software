@@ -65,7 +65,7 @@ class GenerateReport{
 
     String next_month;
 
-
+    int next_year = 0;
 
 
     GenerateReport(long pfReg , int year , String month , String region_op , int daysInMonth ){
@@ -86,7 +86,12 @@ class GenerateReport{
 
 
 
-
+        if ( next_month.equals("JAN")) {
+            next_year = year + 1;
+        }
+        else{
+            next_year = year;
+        }
 
 
 
@@ -95,7 +100,7 @@ class GenerateReport{
         if (region_op == null) {
 
             FileComponentHandler.createDir(Config.getPathMain(), new String[]{
-                "data", pfReg + "", year + "", next_month
+                "data", pfReg + "",next_year + "", next_month
             });
 
             /*
@@ -103,13 +108,14 @@ class GenerateReport{
              */
         } else {
             FileComponentHandler.createDir(Config.getPathMain(), new String[]{
-                "data", pfReg + "", year + "", next_month, region_op
+                "data", pfReg + "",next_year + "", next_month, region_op
             });
 
         }
 
         /* database copied and changes made and connection closed at the same time */
-        Manager.copyDbAndClearCalculatedData(empDir  , month , empDir.replace(month , next_month) , next_month);
+        // Manager.copyDbAndClearCalculatedData(empDir  , month , empDir.replace(month , next_month) , next_month);
+        Manager.copyDbAndClearCalculatedData(empDir  , month , FileComponentHandler.generatePath(Config.getPathMain() , new String[]{"data" , pfReg + "" , next_year + "" , region_op == null ? next_month : next_month + FileComponentHandler.OS_PATH_DELIMITER + region_op}) , next_month);
 
 
 
