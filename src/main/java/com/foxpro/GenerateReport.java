@@ -68,10 +68,11 @@ class GenerateReport{
     int next_year = 0;
 
 
-    GenerateReport(long pfReg , int year , String month , String region_op , int daysInMonth ){
+    GenerateReport(long pfReg , int year , String month , String region_op , int daysInMonth , String next_month ){
         // initializing pfReg , month , daysInMonth for to be used inside naming of pf.xlsx ( sheet name )
         this.pfReg = pfReg;
         this.month = month;
+        this.next_month = next_month;
         this.daysInMonth = daysInMonth;
 
 
@@ -115,7 +116,7 @@ class GenerateReport{
 
         /* database copied and changes made and connection closed at the same time */
         // Manager.copyDbAndClearCalculatedData(empDir  , month , empDir.replace(month , next_month) , next_month);
-        Manager.copyDbAndClearCalculatedData(empDir  , month , FileComponentHandler.generatePath(Config.getPathMain() , new String[]{"data" , pfReg + "" , next_year + "" , region_op == null ? next_month : next_month + FileComponentHandler.OS_PATH_DELIMITER + region_op}) , next_month);
+        // Manager.copyDbAndClearCalculatedData(empDir  , month , FileComponentHandler.generatePath(Config.getPathMain() , new String[]{"data" , pfReg + "" , next_year + "" , region_op == null ? next_month : next_month + FileComponentHandler.OS_PATH_DELIMITER + region_op}) , next_month);
 
 
 

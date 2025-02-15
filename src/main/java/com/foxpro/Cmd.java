@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -62,7 +64,10 @@ class Cmd {
     }
 
     public void run(String pathMain) throws IOException {
-        // String[] months = {"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
+        String[] _monthNames = new String[]{"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"}; // raw
+        ArrayList<String> monthNames = new ArrayList<>(); // for general use
+        Collections.addAll(monthNames , _monthNames);
+
         HashMap<String , Integer> months = new HashMap<>();
         months.put("JAN", 31);
         months.put("FEB", 28);
@@ -414,20 +419,17 @@ class Cmd {
                     print("region ( optional , if no particular region -> leave empty : press [ENTER])");
                     region_optional = bufferedReader.readLine().trim();
                     GenerateReport generator;
-                    // adding it
-                    Iterator<String> month_iterator =  months.keySet().iterator();
+
+
+                    // // adding it
+                    Iterator<String> month_iterator =  monthNames.iterator();
+
                     String iter_month;
                     try {
                         while (month_iterator.hasNext()) {
                             iter_month = month_iterator.next();
                             if (iter_month.equals(month)) {
-                                generator = new GenerateReport(pfRegNumber, year, month, region_optional.isBlank() ? null : region_optional, months.get(month));
-                                if ( month_iterator.hasNext() == true){
-                                    generator.next_month = month_iterator.next();
-                                }
-                                else{
-                                    generator.next_month = "JAN";
-                                }
+                                generator = new GenerateReport(pfRegNumber, year, month, region_optional.isBlank() ? null : region_optional, months.get(month) , month_iterator.hasNext() == true ? month_iterator.next() : "JAN");
                                 generator.generateReport();
                                 Manager.closeEmployeeConnection();
                                 break;
@@ -442,6 +444,9 @@ class Cmd {
                     } catch (SQLException exception) {
                         exception.printStackTrace();
                     }
+
+
+
                     // try {
                     //         for (String m : months.keySet()){
 
@@ -461,6 +466,8 @@ class Cmd {
                     // } catch (SQLException exception) {
                     //     exception.printStackTrace();
                     // }
+
+
 
 
                 } else if (userInput.equalsIgnoreCase("exit") || userInput.equalsIgnoreCase("quit")) {
