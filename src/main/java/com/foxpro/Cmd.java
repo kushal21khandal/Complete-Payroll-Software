@@ -4,10 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 
 class Cmd {
@@ -64,11 +64,12 @@ class Cmd {
     }
 
     public void run(String pathMain) throws IOException {
-        String[] _monthNames = new String[]{"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"}; // raw
-        ArrayList<String> monthNames = new ArrayList<>(); // for general use
-        Collections.addAll(monthNames , _monthNames);
+        // String[] _monthNames = new String[]{"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"}; // raw
+        // ArrayList<String> monthNames = new ArrayList<>(); // for general use
+        // Collections.addAll(monthNames , _monthNames);
 
-        HashMap<String , Integer> months = new HashMap<>();
+        // HashMap<String , Integer> months = new HashMap<>();
+        Map<String , Integer> months = new LinkedHashMap<>();
         months.put("JAN", 31);
         months.put("FEB", 28);
         months.put("MAR", 31);
@@ -422,7 +423,7 @@ class Cmd {
 
 
                     // // adding it
-                    Iterator<String> month_iterator =  monthNames.iterator();
+                    Iterator<String> month_iterator =  months.keySet().iterator();
 
                     String iter_month;
                     try {

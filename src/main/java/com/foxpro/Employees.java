@@ -52,16 +52,16 @@ class Employees {
         this.path_pf_csv = path_pf_csv;
         this.path_client_csv = path_client_csv;
 
-        // salaryStructure = SalaryStructureFactory.getSalaryStructure(pfRegNumber);
+        salaryStructure = SalaryStructureFactory.getSalaryStructure(pfRegNumber);
 
-        // percentBasic = salaryStructure.basic;
-        // percentHra = salaryStructure.hra;
-        // percentConv = salaryStructure.convence;
-        // percentWashingAllowance = salaryStructure.washingAllowance;
-        // percentOvertime = salaryStructure.overtime;
-        // percentMsl1 = salaryStructure.msl1;
-        // percentMsl2 = salaryStructure.msl2;
-        // percentMsl3 = salaryStructure.msl3;
+        percentBasic = salaryStructure.basic;
+        percentHra = salaryStructure.hra;
+        percentConv = salaryStructure.convence;
+        percentWashingAllowance = salaryStructure.washingAllowance;
+        percentOvertime = salaryStructure.overtime;
+        percentMsl1 = salaryStructure.msl1;
+        percentMsl2 = salaryStructure.msl2;
+        percentMsl3 = salaryStructure.msl3;
 
         // if dir/db exists , else create dir/db
         Manager.checkAndCreateDir(pfRegNumber, year, month, region_optional);
@@ -83,10 +83,11 @@ class Employees {
         String[] inputArr;
         String input;
 
+        boolean incentiveProvided = false;
 
-        double total_salary = 0 , attendance;
+        double total_salary, attendance;
 
-        double total_basic = 0,
+        double total_basic,
                 total_hra,
                 total_conv,
                 total_overtime,
@@ -94,7 +95,7 @@ class Employees {
                 calc_basic,
                 calc_hra,
                 calc_conv,
-                calc_overtime = 0,
+                calc_overtime,
                 calc_washingAllowance,
                 calc_incentive = 0,
                 pf_salary, pf_deduction, esic_salary, esic_deduction, total_deduction, calc_salary, netPayableAmount,
@@ -229,8 +230,6 @@ class Employees {
                 fileReader = new FileReader(path_client_csv);
                 BufferedReader fileBufferedReader = new BufferedReader(fileReader);
 
-                // ignore first line headers
-                fileBufferedReader.readLine();
                 while ((input = fileBufferedReader.readLine()) != null) {
                     input = input.trim();
                     inputArr = input.split(",");
@@ -249,11 +248,9 @@ class Employees {
 
                         if (inputArr.length == 5) {
                             // uan , name , salary , attendance , incentive
-                            // total_salary = Double.parseDouble(inputArr[2]);
-                            total_basic = Double.parseDouble(inputArr[2]);
+                            total_salary = Double.parseDouble(inputArr[2]);
                             attendance = Double.parseDouble(inputArr[3]);
-                            calc_overtime = Double.parseDouble(inputArr[4]);
-
+                            calc_incentive = Double.parseDouble(inputArr[4]);
 
                         } else {
                             // uan , salary , attendance , incentive
@@ -294,7 +291,7 @@ class Employees {
                         System.out.println("empty client csv file");
                         break;
                     }
-                    // total_basic = Math.ceil((total_salary * percentBasic) / 100);
+                    total_basic = Math.ceil((total_salary * percentBasic) / 100);
                     total_hra = Math.ceil(total_salary * percentHra) / 100;
                     total_conv = Math.ceil(total_salary * percentConv) / 100;
                     total_washingAllowance = Math.ceil((total_salary * percentWashingAllowance) / 100);
@@ -303,7 +300,7 @@ class Employees {
                     calc_basic = Math.ceil((total_basic * attendance) / daysInMonth);
                     calc_hra = Math.ceil((total_hra * attendance) / daysInMonth);
                     calc_conv = Math.ceil((total_conv * attendance) / daysInMonth);
-                    // calc_overtime = Math.ceil((total_overtime * attendance) / daysInMonth);
+                    calc_overtime = Math.ceil((total_overtime * attendance) / daysInMonth);
                     calc_washingAllowance = Math.ceil((total_washingAllowance * attendance) / daysInMonth);
 
                     pf_salary = calc_basic;
